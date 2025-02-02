@@ -4,6 +4,7 @@ public class UserDaoCsvConstants {
     private UserDaoCsvConstants() {
         /* empty constructor : no instance */
     }
+    public static final String[] HEADER = {"Username", "Password", "Firstname", "Lastname", "Type", "Gender"};
     public static final String PATH_NAME_USER = "db/csv/user_db.csv";
     public static final int USER_INDEX_USERNAME = 0;
     public static final int USER_INDEX_PASSWORD = 1;

@@ -1,6 +1,7 @@
 package it.uniroma2.mindharbor.dao.csv;
 
 import it.uniroma2.mindharbor.beans.PatientBean;
+import it.uniroma2.mindharbor.beans.UserBean;
 import it.uniroma2.mindharbor.dao.PatientDao;
 import it.uniroma2.mindharbor.dao.UserDao;
 import it.uniroma2.mindharbor.dao.csv.constants.PatientDaoCsvConstants;
@@ -48,6 +49,7 @@ public class PatientDaoCsv implements PatientDao {
      * @return A Patient object containing the combined user and patient data.
      * @throws DAOException If an error occurs while retrieving the data.
      */
+    @Override
     public Patient retrievePatient(String username) throws DAOException {
         UserDao userDao = DaoFactoryFacade.getInstance().getUserDao();
         String[] userInfo = userDao.retrieveUser(username);
@@ -60,6 +62,63 @@ public class PatientDaoCsv implements PatientDao {
                 patientInfo[PatientDaoCsvConstants.PATIENT_INDEX_PSYCOLOGIST],
                 LocalDate.parse(patientInfo[PatientDaoCsvConstants.PATIENT_INDEX_BIRTHDATE])
         );
+    }
+
+    /**
+     * Updates an existing patient's details in the persistence layer.
+     * <p>
+     * This method first updates the associated user data using {@link UserDao}.
+     * Then, it searches for the corresponding patient record in the CSV file and updates
+     * the psychologist assigned to the patient. If the patient is not found, a
+     * {@link DAOException} is thrown.
+     * </p>
+     *
+     * @param patient The {@link Patient} object containing the updated patient details.
+     * @param user    The {@link UserBean} object containing the updated user details.
+     * @throws DAOException If the patient does not exist or if an error occurs while updating the data.
+     */
+    @Override
+    public void updatePatient(Patient patient, UserBean user) throws DAOException {
+        UserDao userDao = DaoFactoryFacade.getInstance().getUserDao();
+        userDao.updateUser(user);
+        List<String[]> patientTable = CsvUtilities.readAll(fd);
+        boolean found = false;
+        for (String[] record : patientTable) {
+            if (record[PatientDaoCsvConstants.PATIENT_INDEX_USERNAME].equals(patient.getUsername())) {
+                record[PatientDaoCsvConstants.PATIENT_INDEX_USERNAME] = patient.getUsername();
+                record[PatientDaoCsvConstants.PATIENT_INDEX_BIRTHDATE] = patient.getBirthday().toString();
+                record[PatientDaoCsvConstants.PATIENT_INDEX_PSYCOLOGIST] = patient.getPsychologist();
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            throw new DAOException("Patient not found: " + patient.getUsername());
+        }
+        CsvUtilities.updateFile(fd, PatientDaoCsvConstants.HEADER, patientTable);
+    }
+
+    /**
+     * Deletes a patient from the persistence layer.
+     * <p>
+     * This method first deletes the associated user data using {@link UserDao}.
+     * Then, it removes the corresponding patient record from the CSV file.
+     * If the patient does not exist, a {@link DAOException} is thrown.
+     * </p>
+     *
+     * @param username The username of the patient to delete.
+     * @throws DAOException If the patient does not exist or if an error occurs while deleting the patient.
+     */
+    @Override
+    public void deletePatient(String username) throws DAOException {
+        UserDao userDao = DaoFactoryFacade.getInstance().getUserDao();
+        userDao.deleteUser(username);
+        List<String[]> patientTable = CsvUtilities.readAll(fd);
+        boolean removed = patientTable.removeIf(record -> record[PatientDaoCsvConstants.PATIENT_INDEX_USERNAME].equals(username));
+        if (!removed) {
+            throw new DAOException("Patient not found: " + username);
+        }
+        CsvUtilities.updateFile(fd, PatientDaoCsvConstants.HEADER, patientTable);
     }
 
     /**

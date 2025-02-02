@@ -73,4 +73,14 @@ public class UserDaoMySql implements UserDao {
     public String[] retrieveUser(String username) throws DAOException {
         return new String[0]; // Implementation placeholder
     }
+
+    @Override
+    public void updateUser(UserBean user) throws DAOException {
+
+    }
+
+    @Override
+    public void deleteUser(String username) throws DAOException {
+
+    }
 }
