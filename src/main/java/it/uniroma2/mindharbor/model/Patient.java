@@ -23,7 +23,7 @@ public class Patient extends User {
      * @param surname      the last name of the patient.
      * @param gender       the gender of the patient.
      * @param psychologist the psychologist assigned to the patient.
-     * @param birthday     the birth date of the patient.
+     * @param birthday     the birthdate of the patient.
      */
     public Patient(String username, String name, String surname, String gender, String psychologist, LocalDate birthday) {
         super(username, name, surname, gender);

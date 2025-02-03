@@ -5,6 +5,8 @@ import it.uniroma2.mindharbor.beans.UserBean;
 import it.uniroma2.mindharbor.exception.DAOException;
 import it.uniroma2.mindharbor.model.Patient;
 
+import java.util.List;
+
 /**
  * The {@code PatientDao} interface defines data access operations for managing patients.
  * <p>
@@ -37,6 +39,21 @@ public interface PatientDao {
      * @throws DAOException If an error occurs while accessing the data storage.
      */
     public Patient retrievePatient(String username) throws DAOException;
+
+    /**
+     * Retrieves a list of patients assigned to a specific psychologist.
+     * <p>
+     * This method searches the patient database for records where the psychologist's username
+     * matches the specified value. It returns a list of {@link PatientBean} objects
+     * representing the patients under the psychologist's care.
+     * </p>
+     *
+     * @param psychologist The username of the psychologist whose patients are to be retrieved.
+     * @return A list of {@link PatientBean} objects representing the patients assigned to the psychologist.
+     * If no patients are found, the list will be empty.
+     * @throws DAOException If an error occurs while accessing the data storage.
+     */
+    public List<PatientBean> retrivePatientsByPsychologist(String psychologist) throws DAOException;
 
     /**
      * Updates an existing patient's details in the persistence layer.

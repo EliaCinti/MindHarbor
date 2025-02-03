@@ -3,6 +3,7 @@ package it.uniroma2.mindharbor.dao.csv;
 import it.uniroma2.mindharbor.beans.PatientBean;
 import it.uniroma2.mindharbor.beans.PsychologistBean;
 import it.uniroma2.mindharbor.beans.UserBean;
+import it.uniroma2.mindharbor.dao.PatientDao;
 import it.uniroma2.mindharbor.dao.PsychologistDao;
 import it.uniroma2.mindharbor.dao.UserDao;
 import it.uniroma2.mindharbor.dao.csv.constants.PsychologistDaoCsvConstants;
@@ -118,8 +119,8 @@ public class PsychologistDaoCsv implements PsychologistDao {
      */
     @Override
     public List<PatientBean> getPatients(String psychologistUsername) throws DAOException {
-        // DA IMPLEMENTARE
-        return List.of();
+        PatientDao patientDao = DaoFactoryFacade.getInstance().getPatientDao();
+        return patientDao.retrivePatientsByPsychologist(psychologistUsername);
     }
 
     /**

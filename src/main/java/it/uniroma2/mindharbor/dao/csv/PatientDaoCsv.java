@@ -13,6 +13,7 @@ import it.uniroma2.mindharbor.utilities.CsvUtilities;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,6 +63,21 @@ public class PatientDaoCsv implements PatientDao {
                 patientInfo[PatientDaoCsvConstants.PATIENT_INDEX_PSYCOLOGIST],
                 LocalDate.parse(patientInfo[PatientDaoCsvConstants.PATIENT_INDEX_BIRTHDATE])
         );
+    }
+
+    @Override
+    public List<PatientBean> retrivePatientsByPsychologist(String psychologist) throws DAOException {
+        List<String[]> patientRecord = CsvUtilities.readAll(fd);
+        List<PatientBean> patients = new ArrayList<PatientBean>();
+        for (String[] record : patientRecord) {
+            if (record[PatientDaoCsvConstants.PATIENT_INDEX_PSYCOLOGIST].equals(psychologist)) {
+                patients.add(new PatientBean.Builder()
+                        .username(record[PatientDaoCsvConstants.PATIENT_INDEX_USERNAME])
+                        .birthDate(LocalDate.parse(record[PatientDaoCsvConstants.PATIENT_INDEX_BIRTHDATE]))
+                        .build());
+            }
+        }
+        return patients;
     }
 
     /**
