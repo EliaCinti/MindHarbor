@@ -2,22 +2,26 @@ package it.uniroma2.mindharbor.patterns.factory;
 
 import it.uniroma2.mindharbor.dao.PatientDao;
 import it.uniroma2.mindharbor.dao.csv.PatientDaoCsv;
+import it.uniroma2.mindharbor.dao.mysql.PatientDaoMySql;
 import it.uniroma2.mindharbor.patterns.facade.PersistenceType;
 
 /**
- * Factory class for creating instances of {@link PatientDao} based on the persistence type.
+ * Factory class for creating instances of {@link PatientDao} according to the specified persistence type.
+ * Utilizing the Factory pattern, this class abstracts the instantiation of PatientDao objects, allowing the rest of the application
+ * to remain decoupled from the specifics of data storage mechanisms, such as CSV files or MySQL databases.
  * <p>
- * This class follows the Factory pattern to abstract the creation of DAOs for different
- * persistence mechanisms (e.g., CSV, MySQL).
+ * This abstraction aids in the flexibility and scalability of the application by facilitating easy switches between different storage types.
  * </p>
  */
 public class PatientDaoFactory {
 
     /**
      * Retrieves a {@link PatientDao} instance based on the specified persistence type.
+     * This factory method delegates the instantiation to more specific methods based on the storage type,
+     * thus encapsulating the creation logic and enhancing maintainability.
      *
-     * @param persistenceType The type of persistence (e.g., CSV, MySQL).
-     * @return A {@link PatientDao} instance corresponding to the specified persistence type.
+     * @param persistenceType The type of persistence (e.g., CSV, MySQL), directing which DAO implementation to use.
+     * @return A {@link PatientDao} instance that is appropriate for the specified persistence type.
      */
     public PatientDao getPatientDao(PersistenceType persistenceType) {
         return switch (persistenceType) {
@@ -27,24 +31,25 @@ public class PatientDaoFactory {
     }
 
     /**
-     * Creates a {@link PatientDao} instance for CSV-based persistence.
+     * Creates and returns a new instance of {@link PatientDaoCsv}, specifically configured for handling patient data in CSV format.
+     * This method provides a concrete implementation of {@link PatientDao} optimized for file-based data storage.
      *
-     * @return A new instance of {@link PatientDaoCsv}.
+     * @return A newly created instance of {@link PatientDaoCsv}.
      */
-    public PatientDao createPatientDaoCsv() {
+    private PatientDao createPatientDaoCsv() {
         return new PatientDaoCsv();
     }
 
+
     /**
-     * Creates a {@link PatientDao} instance for MySQL-based persistence.
-     * <p>
-     * This method currently returns a {@link PatientDaoCsv} instance as a placeholder.
-     * In a real implementation, it should return a MySQL-specific DAO.
-     * </p>
+     * Creates and returns a new instance of a {@link PatientDao} for MySQL database storage.
+     * Currently, this method returns a {@link PatientDaoCsv} instance as a placeholder due to the lack of a MySQL implementation.
+     * This should be replaced with a MySQL-specific DAO once implemented.
      *
-     * @return A new instance of {@link PatientDao}.
+     * @return A {@link PatientDao} instance appropriate for MySQL database operations.
+     * @todo Implement and return a MySQL-specific DAO for patient data management.
      */
-    public PatientDao createPatientDaoMySql() {
-        return new PatientDaoCsv();
+    private PatientDao createPatientDaoMySql() {
+        return new PatientDaoMySql();
     }
 }

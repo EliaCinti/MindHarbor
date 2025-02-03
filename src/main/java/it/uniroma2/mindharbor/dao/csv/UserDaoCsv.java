@@ -55,7 +55,7 @@ public class UserDaoCsv implements UserDao {
             throw new DAOException(UserDaoCsvConstants.USER_EXIST);
         }
         // non esiste, posso procedere
-        String[] userRecord = new String[6];
+        String[] userRecord = new String[UserDaoCsvConstants.HEADER.length];
         userRecord[UserDaoCsvConstants.USER_INDEX_USERNAME] = user.getUsername();
         userRecord[UserDaoCsvConstants.USER_INDEX_PASSWORD] = user.getPassword();
         userRecord[UserDaoCsvConstants.USER_INDEX_FIRST_NAME] = user.getName();
@@ -118,7 +118,7 @@ public class UserDaoCsv implements UserDao {
             }
         }
         if (!found) {
-            throw new DAOException("User not found: " + user.getUsername());
+            throw new DAOException(UserDaoCsvConstants.USER_NOT_FOUND + user.getUsername());
         }
         // Update the file with the modified data
         CsvUtilities.updateFile(fd, UserDaoCsvConstants.HEADER, userTable);
@@ -141,7 +141,7 @@ public class UserDaoCsv implements UserDao {
         // Remove the record corresponding to the given username
         boolean removed = userTable.removeIf(record -> record[UserDaoCsvConstants.USER_INDEX_USERNAME].equals(username));
         if (!removed) {
-            throw new DAOException("User not found: " + username);
+            throw new DAOException(UserDaoCsvConstants.USER_NOT_FOUND + username);
         }
         // Update the file with the modified data
         CsvUtilities.updateFile(fd, UserDaoCsvConstants.HEADER, userTable);

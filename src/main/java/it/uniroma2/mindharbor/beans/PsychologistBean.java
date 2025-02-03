@@ -19,12 +19,11 @@ public class PsychologistBean extends UserBean {
      * @param surname    The psychologist's last name.
      * @param gender     The psychologist's gender.
      * @param hourlyCost The psychologist's hourly consultation cost.
-     * @param office     The office location of the psychologist.
      */
     public PsychologistBean(String username, String password, String type, String name, String surname, String gender, double hourlyCost, String office) {
         super(username, password, type, name, surname, gender);
-        this.office = office;
-        this.hourlyCost = hourlyCost;
+        setHourlyCost(hourlyCost);
+        setOffice(office);
     }
 
     /**

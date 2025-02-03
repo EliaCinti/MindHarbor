@@ -1,7 +1,6 @@
 package it.uniroma2.mindharbor.dao;
 
 import it.uniroma2.mindharbor.exception.DAOException;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;

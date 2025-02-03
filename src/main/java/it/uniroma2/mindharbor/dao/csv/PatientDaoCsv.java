@@ -35,7 +35,7 @@ public class PatientDaoCsv implements PatientDao {
     public void savePatient(PatientBean patient) throws DAOException {
         UserDao userDao = DaoFactoryFacade.getInstance().getUserDao();
         userDao.saveUser(patient);
-        String[] patientRecord = new String[3];
+        String[] patientRecord = new String[PatientDaoCsvConstants.HEADER.length];
         patientRecord[PatientDaoCsvConstants.PATIENT_INDEX_USERNAME] = patient.getUsername();
         patientRecord[PatientDaoCsvConstants.PATIENT_INDEX_BIRTHDATE] = patient.getBirthDate().toString();
         CsvUtilities.writeFile(fd, patientRecord);
@@ -85,7 +85,6 @@ public class PatientDaoCsv implements PatientDao {
         boolean found = false;
         for (String[] record : patientTable) {
             if (record[PatientDaoCsvConstants.PATIENT_INDEX_USERNAME].equals(patient.getUsername())) {
-                record[PatientDaoCsvConstants.PATIENT_INDEX_USERNAME] = patient.getUsername();
                 record[PatientDaoCsvConstants.PATIENT_INDEX_BIRTHDATE] = patient.getBirthday().toString();
                 record[PatientDaoCsvConstants.PATIENT_INDEX_PSYCOLOGIST] = patient.getPsychologist();
                 found = true;
@@ -93,7 +92,7 @@ public class PatientDaoCsv implements PatientDao {
             }
         }
         if (!found) {
-            throw new DAOException("Patient not found: " + patient.getUsername());
+            throw new DAOException(PatientDaoCsvConstants.PATIENT_NOT_FOUND + patient.getUsername());
         }
         CsvUtilities.updateFile(fd, PatientDaoCsvConstants.HEADER, patientTable);
     }
@@ -116,7 +115,7 @@ public class PatientDaoCsv implements PatientDao {
         List<String[]> patientTable = CsvUtilities.readAll(fd);
         boolean removed = patientTable.removeIf(record -> record[PatientDaoCsvConstants.PATIENT_INDEX_USERNAME].equals(username));
         if (!removed) {
-            throw new DAOException("Patient not found: " + username);
+            throw new DAOException(PatientDaoCsvConstants.PATIENT_NOT_FOUND + username);
         }
         CsvUtilities.updateFile(fd, PatientDaoCsvConstants.HEADER, patientTable);
     }

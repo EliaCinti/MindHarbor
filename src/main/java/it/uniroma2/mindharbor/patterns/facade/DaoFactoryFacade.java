@@ -9,10 +9,12 @@ import it.uniroma2.mindharbor.patterns.factory.UserDaoFactory;
 
 /**
  * Facade class for managing Data Access Object (DAO) creation through factories.
+ * This class acts as a central point for managing DAOs across different persistence
+ * types (e.g., CSV, MySQL) using a singleton pattern to ensure a single unified point of access.
  * <p>
- * This class simplifies the creation and management of DAOs for different entities,
- * such as users, patients, and psychologists. It uses a singleton pattern to ensure
- * only one instance of the facade exists during runtime.
+ * It simplifies the client's interaction with DAO creation, handling the instantiation
+ * of DAOs based on the specified persistence type and ensuring that each DAO type is
+ * instantiated only once per runtime.
  * </p>
  */
 public class DaoFactoryFacade {
@@ -23,16 +25,17 @@ public class DaoFactoryFacade {
     private PsychologistDao psychologistDao;
 
     /**
-     * Private constructor to prevent direct instantiation.
-     * This class follows the singleton pattern.
+     * Private constructor to prevent external instantiation, enforcing the singleton pattern.
      */
     private DaoFactoryFacade() {
         /* Empty constructor */
     }
 
+
     /**
-     * Retrieves the single instance of the {@code DaoFactoryFacade}.
-     * If the instance does not exist, it is created.
+     * Provides global access to the single instance of the {@code DaoFactoryFacade},
+     * creating it if it does not yet exist. This method is thread-safe to prevent
+     * multiple instantiation in a multi-threaded environment.
      *
      * @return The singleton instance of {@code DaoFactoryFacade}.
      */
@@ -44,19 +47,20 @@ public class DaoFactoryFacade {
     }
 
     /**
-     * Sets the persistence type to be used for creating DAOs.
+     * Sets the type of persistence mechanism that DAOs should use throughout the application.
+     * This allows dynamic changes in the persistence strategy at runtime.
      *
-     * @param persistenceType The persistence type (e.g., CSV, MySQL).
+     * @param persistenceType The desired persistence type (e.g., CSV, MySQL).
      */
     public void setPersistenceType(PersistenceType persistenceType) {
         this.persistenceType = persistenceType;
     }
 
     /**
-     * Retrieves the {@link UserDao} instance.
-     * If the DAO has not been initialized, it is created using the {@link UserDaoFactory}.
+     * Retrieves a singleton instance of {@link UserDao}, creating it through {@link UserDaoFactory}
+     * if not previously instantiated. Ensures the DAO is aligned with the current persistence strategy.
      *
-     * @return The {@link UserDao} instance.
+     * @return The singleton {@link UserDao} instance.
      */
     public UserDao getUserDao() {
         if (userDao == null) {
@@ -66,11 +70,12 @@ public class DaoFactoryFacade {
         return userDao;
     }
 
+
     /**
-     * Retrieves the {@link PatientDao} instance.
-     * If the DAO has not been initialized, it is created using the {@link PatientDaoFactory}.
+     * Retrieves a singleton instance of {@link PatientDao}, creating it through {@link PatientDaoFactory}
+     * if not previously instantiated. Ensures the DAO is aligned with the current persistence strategy.
      *
-     * @return The {@link PatientDao} instance.
+     * @return The singleton {@link PatientDao} instance.
      */
     public PatientDao getPatientDao() {
         if (patientDao == null) {
@@ -81,10 +86,10 @@ public class DaoFactoryFacade {
     }
 
     /**
-     * Retrieves the {@link PsychologistDao} instance.
-     * If the DAO has not been initialized, it is created using the {@link PsychologistDaoFactory}.
+     * Retrieves a singleton instance of {@link PsychologistDao}, creating it through {@link PsychologistDaoFactory}
+     * if not previously instantiated. Ensures the DAO is aligned with the current persistence strategy.
      *
-     * @return The {@link PsychologistDao} instance.
+     * @return The singleton {@link PsychologistDao} instance.
      */
     public PsychologistDao getPsychologistDao() {
         if (psychologistDao == null) {

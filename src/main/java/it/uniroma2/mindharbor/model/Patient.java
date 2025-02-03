@@ -6,45 +6,90 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a patient in the system, extending the {@link User} with specific attributes and behaviors
+ * pertinent to a patient, such as managing appointments and maintaining a relationship with a psychologist.
+ */
 public class Patient extends User {
     private String psychologist;
     private LocalDate birthday;
     private List<Appointment> appointmentList = new ArrayList<>();
+
+    /**
+     * Constructs a new patient with specified personal and medical details.
+     *
+     * @param username     the unique identifier for the patient.
+     * @param name         the first name of the patient.
+     * @param surname      the last name of the patient.
+     * @param gender       the gender of the patient.
+     * @param psychologist the psychologist assigned to the patient.
+     * @param birthday     the birth date of the patient.
+     */
     public Patient(String username, String name, String surname, String gender, String psychologist, LocalDate birthday) {
         super(username, name, surname, gender);
         setPsychologist(psychologist);
         setBirthday(birthday);
     }
 
+    /**
+     * Retrieves the psychologist assigned to the patient.
+     *
+     * @return the psychologist's identifier.
+     */
     public String getPsychologist() {
         return psychologist;
     }
 
+    /**
+     * Assigns a psychologist to the patient.
+     *
+     * @param psychologist the psychologist's identifier to set.
+     */
     public void setPsychologist(String psychologist) {
         this.psychologist = psychologist;
     }
 
+    /**
+     * Retrieves the patient's birthday.
+     *
+     * @return the birthday as a LocalDate object.
+     */
     public LocalDate getBirthday() {
         return birthday;
     }
 
+    /**
+     * Sets the patient's birthday.
+     *
+     * @param birthday the new birthday to set as a LocalDate object.
+     */
     public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 
+    /**
+     * Retrieves the list of appointments for the patient.
+     *
+     * @return a list of Appointment objects.
+     */
     public List<Appointment> getAppointmentList() {
         return appointmentList;
     }
 
+    /**
+     * Sets the list of appointments for the patient.
+     *
+     * @param appointmentList the list of Appointment objects to set.
+     */
     public void setAppointmentList(List<Appointment> appointmentList) {
         this.appointmentList = appointmentList;
     }
 
     /**
-     * Adds an appointment to the patient's appointment list if it is not already present.
+     * Adds an appointment to the patient's list if it doesn't already exist, ensuring no duplicates.
      *
      * @param appointment The appointment to be added.
-     * @throws BookingNotAllowedException If the appointment is already in the list.
+     * @throws BookingNotAllowedException if the appointment already exists in the list.
      */
     public void addAppointment(Appointment appointment) throws BookingNotAllowedException {
         if (appointmentList.contains(appointment)) {
@@ -53,11 +98,12 @@ public class Patient extends User {
         appointmentList.add(appointment);
     }
 
+
     /**
-     * Retrieves an appointment for a specific date.
+     * Finds an appointment on a specific date.
      *
-     * @param date The date of the appointment to find.
-     * @return The appointment on the given date, or null if no appointment is found.
+     * @param date The date to search for an appointment.
+     * @return The appointment if found, or null if there is no appointment on that date.
      */
     public Appointment getAppointmentByDate(LocalDate date) {
         for (Appointment appointment : appointmentList) {
@@ -67,41 +113,43 @@ public class Patient extends User {
         return null;
     }
 
+
     /**
-     * Retrieves a list of appointments scheduled before the given date.
+     * Retrieves all appointments before a given date.
      *
-     * @param date The reference date.
-     * @return A list of appointments that occur before the given date.
+     * @param date The cutoff date.
+     * @return A list of all appointments before the specified date.
      */
     public List<Appointment> getAppointmentsBeforeDate(LocalDate date) {
         List<Appointment> appointmentListBefore = new ArrayList<>();
         for (Appointment appointment : appointmentList) {
-            if(appointment.getDate().isBefore(date))
+            if (appointment.getDate().isBefore(date))
                 appointmentListBefore.add(appointment);
         }
         return appointmentListBefore;
     }
 
+
     /**
-     * Retrieves a list of appointments scheduled after the given date.
+     * Retrieves all appointments after a given date.
      *
-     * @param date The reference date.
-     * @return A list of appointments that occur after the given date.
+     * @param date The starting date.
+     * @return A list of all appointments after the specified date.
      */
     public List<Appointment> getAppointmentsAfterDate(LocalDate date) {
         List<Appointment> appointmentListAfter = new ArrayList<>();
         for (Appointment appointment : appointmentList) {
-            if(appointment.getDate().isAfter(date))
+            if (appointment.getDate().isAfter(date))
                 appointmentListAfter.add(appointment);
         }
         return appointmentListAfter;
     }
 
     /**
-     * Checks if two patients are equal based on their username.
+     * Compares this patient with another object to determine equality, based primarily on the username.
      *
-     * @param obj The object to compare.
-     * @return true if the given object is a Patient and has the same username, false otherwise.
+     * @param obj The object to compare with this patient.
+     * @return true if the other object is a Patient with the same username, false otherwise.
      */
     @Override
     public boolean equals(Object obj) {
@@ -110,13 +158,14 @@ public class Patient extends User {
         return false;
     }
 
+
     /**
-     * Returns the hash code of the patient.
+     * Generates a hash code for a patient, derived from the username.
      *
-     * @return The hash code.
+     * @return the hash code.
      */
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return super.hashCode();
     }
 

@@ -1,8 +1,13 @@
 package it.uniroma2.mindharbor.dao.mysql;
 
+import it.uniroma2.mindharbor.beans.PatientBean;
 import it.uniroma2.mindharbor.beans.PsychologistBean;
+import it.uniroma2.mindharbor.beans.UserBean;
 import it.uniroma2.mindharbor.dao.PsychologistDao;
 import it.uniroma2.mindharbor.exception.DAOException;
+import it.uniroma2.mindharbor.model.Psychologist;
+
+import java.util.List;
 
 /**
  * MySQL implementation of the {@link PsychologistDao} interface.
@@ -27,5 +32,25 @@ public class PsychologistDaoMySql implements PsychologistDao {
     @Override
     public void savePsychologist(PsychologistBean psychologist) throws DAOException {
         // Implementation placeholder
+    }
+
+    @Override
+    public Psychologist retrievePsychologist(String username) throws DAOException {
+        return null;
+    }
+
+    @Override
+    public void updatePsychologist(Psychologist psychologist, UserBean bean) throws DAOException {
+
+    }
+
+    @Override
+    public void deletePsychologist(String username) throws DAOException {
+
+    }
+
+    @Override
+    public List<PatientBean> getPatients(String psychologistUsername) throws DAOException {
+        return List.of();
     }
 }
