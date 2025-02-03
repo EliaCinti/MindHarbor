@@ -4,6 +4,9 @@ package it.uniroma2.mindharbor.beans;
  * The {@code UserBean} class represents a general user in the system.
  * It extends the {@code CredentialsBean} class by adding personal details
  * such as name, surname, and gender.
+ * <p>
+ * Instances of this class are immutable and must be created using the {@link Builder}.
+ * </p>
  */
 public class UserBean extends CredentialsBean {
     private String name;
@@ -11,35 +14,95 @@ public class UserBean extends CredentialsBean {
     private String gender;
 
     /**
-     * Constructs a {@code UserBean} instance with full user details.
+     * Protected constructor used by the {@link Builder} to create an instance of {@code UserBean}.
      *
-     * @param username The user's username.
-     * @param password The user's password.
-     * @param type     The user type (e.g., "patient", "psychologist").
-     * @param name     The user's first name.
-     * @param surname  The user's last name.
-     * @param gender   The user's gender.
+     * @param builder The builder instance containing the required parameters.
      */
-    public UserBean(String username, String password, String type, String name, String surname, String gender) {
-        super(username, password, type);
-        this.name = name;
-        this.surname = surname;
-        this.gender = gender;
+    protected UserBean(Builder<?> builder) {
+        super(builder);
+        this.name = builder.name;
+        this.surname = builder.surname;
+        this.gender = builder.gender;
     }
 
     /**
-     * Constructs a {@code UserBean} instance with only credentials.
+     * Builder class for {@code UserBean}.
+     * <p>
+     * This class extends {@link CredentialsBean.Builder} and allows incremental and flexible object creation.
+     * It provides additional methods to set user-specific details.
+     * </p>
      *
-     * @param username The user's username.
-     * @param password The user's password.
-     * @param type     The user type (e.g., "patient", "psychologist").
+     * @param <T> The type of the Builder, enabling method chaining in subclasses.
      */
-    public UserBean(String username, String password, String type) {
-        super(username, password, type);
+    public static class Builder<T extends Builder<T>> extends CredentialsBean.Builder<T> {
+        private String name;
+        private String surname;
+        private String gender;
+
+        /**
+         * Default constructor for {@code UserBean.Builder}.
+         */
+        public Builder() {
+            super();
+        }
+
+        /**
+         * Sets the user's first name.
+         *
+         * @param name The first name of the user.
+         * @return The builder instance for method chaining.
+         */
+        public T name(String name) {
+            this.name = name;
+            return self();
+        }
+
+        /**
+         * Sets the user's last name.
+         *
+         * @param surname The last name of the user.
+         * @return The builder instance for method chaining.
+         */
+        public T surname(String surname) {
+            this.surname = surname;
+            return self();
+        }
+
+        /**
+         * Sets the user's gender.
+         *
+         * @param gender The gender of the user.
+         * @return The builder instance for method chaining.
+         */
+        public T gender(String gender) {
+            this.gender = gender;
+            return self();
+        }
+
+        /**
+         * Returns the correct Builder instance, allowing subclasses to override this method
+         * for correct method chaining.
+         *
+         * @return The builder instance of type {@code T}.
+         */
+        @SuppressWarnings("unchecked")
+        @Override
+        protected T self() {
+            return (T) this;
+        }
+
+        /**
+         * Builds and returns an instance of {@code UserBean}.
+         *
+         * @return A new {@code UserBean} instance with the set properties.
+         */
+        public UserBean build() {
+            return new UserBean(this);
+        }
     }
 
     /**
-     * Gets the user's first name.
+     * Retrieves the user's first name.
      *
      * @return The first name of the user.
      */
@@ -57,7 +120,7 @@ public class UserBean extends CredentialsBean {
     }
 
     /**
-     * Gets the user's last name.
+     * Retrieves the user's last name.
      *
      * @return The last name of the user.
      */
@@ -75,7 +138,7 @@ public class UserBean extends CredentialsBean {
     }
 
     /**
-     * Gets the user's gender.
+     * Retrieves the user's gender.
      *
      * @return The gender of the user.
      */

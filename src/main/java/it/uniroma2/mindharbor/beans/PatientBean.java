@@ -5,40 +5,86 @@ import java.time.LocalDate;
 /**
  * The {@code PatientBean} class represents a patient in the system.
  * It extends the {@code UserBean} class and includes additional information
- * about the patient's birth date.
+ * about the patient's birthdate.
+ * <p>
+ * Instances of this class are immutable and must be created using the {@link Builder}.
+ * </p>
  */
 public class PatientBean extends UserBean {
     private LocalDate birthDate;
 
     /**
-     * Constructs a {@code PatientBean} instance.
+     * Private constructor used by the {@link Builder} to create an instance of {@code PatientBean}.
      *
-     * @param username  The patient's username.
-     * @param password  The patient's password.
-     * @param type      The user type (e.g., "patient").
-     * @param name      The patient's first name.
-     * @param surname   The patient's last name.
-     * @param gender    The patient's gender.
-     * @param birthdate The patient's birth date.
+     * @param builder The builder instance containing the required parameters.
      */
-    public PatientBean(String username, String password, String type, String name, String surname, String gender, LocalDate birthdate) {
-        super(username, password, type, name, surname, gender);
-        this.birthDate = birthdate;
+    private PatientBean(Builder builder) {
+        super(builder);
+        this.birthDate = builder.birthDate;
     }
 
     /**
-     * Gets the patient's birth date.
+     * Builder class for {@code PatientBean}.
+     * <p>
+     * This class extends {@link UserBean.Builder} and allows incremental and flexible object creation.
+     * It provides an additional method to set the patient's birthdate.
+     * </p>
+     */
+    public static class Builder extends UserBean.Builder<Builder> {
+        private LocalDate birthDate;
+
+        /**
+         * Default constructor for {@code PatientBean.Builder}.
+         */
+        public Builder() {
+            super();
+        }
+
+        /**
+         * Sets the patient's birthdate.
+         *
+         * @param birthDate The birthdate of the patient.
+         * @return The builder instance for method chaining.
+         */
+        public Builder birthDate(LocalDate birthDate) {
+            this.birthDate = birthDate;
+            return this;
+        }
+
+        /**
+         * Builds and returns an instance of {@code PatientBean}.
+         *
+         * @return A new {@code PatientBean} instance with the set properties.
+         */
+        @Override
+        public PatientBean build() {
+            return new PatientBean(this);
+        }
+
+        /**
+         * Returns the correct Builder instance, allowing method chaining.
+         *
+         * @return The builder instance of type {@code Builder}.
+         */
+        @Override
+        protected Builder self() {
+            return this;
+        }
+    }
+
+    /**
+     * Retrieves the patient's birthdate.
      *
-     * @return The birth date of the patient.
+     * @return The birthdate of the patient.
      */
     public LocalDate getBirthDate() {
         return birthDate;
     }
 
     /**
-     * Sets the patient's birth date.
+     * Sets the patient's birthdate.
      *
-     * @param birthDate The new birth date of the patient.
+     * @param birthDate The new birthdate of the patient.
      */
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
