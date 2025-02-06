@@ -1,6 +1,5 @@
 package it.uniroma2.mindharbor.dao;
 
-import it.uniroma2.mindharbor.beans.PatientBean;
 import it.uniroma2.mindharbor.beans.PsychologistBean;
 import it.uniroma2.mindharbor.beans.UserBean;
 import it.uniroma2.mindharbor.exception.DAOException;
@@ -58,7 +57,7 @@ public interface PsychologistDao {
      * the complete list of patients and filter those that are associated with the specified psychologist.
      * </p>
      *
-     * @param psychologist the {@link Psychologist} that want retrive the patients list
+     * @param psychologist the {@link Psychologist} that want retrive the patient's list
      * @return a list of {@link Patient} containing the associated patients.
      * @throws DAOException if an error occurs during data access.
      */

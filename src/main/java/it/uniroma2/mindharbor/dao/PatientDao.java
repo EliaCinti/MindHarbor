@@ -26,7 +26,7 @@ public interface PatientDao {
      * @param patient The {@link PatientBean} object containing the patient's details.
      * @throws DAOException If an error occurs while saving the patient or if the patient already exists.
      */
-    public void savePatient(PatientBean patient) throws DAOException;
+    void savePatient(PatientBean patient) throws DAOException;
 
     /**
      * Retrieves patient details from the persistence layer based on the username.
@@ -39,7 +39,7 @@ public interface PatientDao {
      * @return A {@link Patient} object if found, otherwise {@code null}.
      * @throws DAOException If an error occurs while accessing the data storage.
      */
-    public Patient retrievePatient(String username) throws DAOException;
+    Patient retrievePatient(String username) throws DAOException;
 
     /**
      * Retrieves a list of patients assigned to a specific psychologist.
@@ -54,7 +54,7 @@ public interface PatientDao {
      * If no patients are found, the list will be empty.
      * @throws DAOException If an error occurs while accessing the data storage.
      */
-    public List<Patient> retrievePatientsByPsychologist(Psychologist psychologist) throws DAOException;
+    List<Patient> retrievePatientsByPsychologist(Psychologist psychologist) throws DAOException;
 
     /**
      * Updates an existing patient's details in the persistence layer.
@@ -67,7 +67,7 @@ public interface PatientDao {
      *
      * @param patient The {@link Patient} object containing the updated patient-specific details.
      * @param user    The {@link UserBean} object containing the updated general user details.
-     * @throws DAOException If the patient does not exist or if an error occurs while updating the data.
+     * @throws DAOException If the patient does not exist, or if an error occurs while updating the data.
      */
     void updatePatient(Patient patient, UserBean user) throws DAOException;
 

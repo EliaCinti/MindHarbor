@@ -7,10 +7,10 @@ import java.time.LocalTime;
  * Represents an appointment with a specific date, time, and description.
  */
 public class Appointment {
-    private int id;
-    private LocalDate date;
-    private LocalTime time;
-    private String description;
+    private final int id;
+    private final LocalDate date;
+    private final LocalTime time;
+    private final String description;
 
     /**
      * Constructs an Appointment with the given parameters.

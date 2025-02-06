@@ -4,7 +4,7 @@ package it.uniroma2.mindharbor.beans;
  * Represents a user's credentials including username, password, and user type.
  * This class provides a Builder pattern for constructing instances in a flexible manner.
  * <p>
- * The {@code CredentialsBean} stores fundamental user information such as:
+ * The {@code CredentialsBean} stores fundamental user information such as
  * - Username
  * - Password
  * - User type (e.g., "admin", "patient", "psychologist").

@@ -7,7 +7,7 @@ import it.uniroma2.mindharbor.patterns.facade.PersistenceType;
 
 /**
  * Factory class for creating instances of {@link PatientDao} according to the specified persistence type.
- * Utilizing the Factory pattern, this class abstracts the instantiation of PatientDao objects, allowing the rest of the application
+ * Using the Factory pattern, this class abstracts the instantiation of PatientDao objects, allowing the rest of the application
  * to remain decoupled from the specifics of data storage mechanisms, such as CSV files or MySQL databases.
  * <p>
  * This abstraction aids in the flexibility and scalability of the application by facilitating easy switches between different storage types.
@@ -47,7 +47,7 @@ public class PatientDaoFactory {
      * This should be replaced with a MySQL-specific DAO once implemented.
      *
      * @return A {@link PatientDao} instance appropriate for MySQL database operations.
-     * @todo Implement and return a MySQL-specific DAO for patient data management.
+     * @TODO Implement and return a MySQL-specific DAO for patient data management.
      */
     private PatientDao createPatientDaoMySql() {
         return new PatientDaoMySql();

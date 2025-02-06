@@ -15,7 +15,7 @@ public class PatientDaoCsvConstants {
 
     /**
      * Headers used in the patient CSV file, corresponding to each column in the CSV.
-     * These headers are utilized to ensure correct data parsing and writing.
+     * These headers are used to ensure correct data parsing and writing.
      */
     public static final String[] HEADER = {"Username", "Birth Date", "Psychologist"};
     /**
@@ -28,8 +28,8 @@ public class PatientDaoCsvConstants {
      */
     public static final int PATIENT_INDEX_USERNAME = 0;
     /**
-     * Index for the birth date column in the patient CSV.
-     * This index is used to access the birth date information of the patient.
+     * Index for the birthdate column in the patient CSV.
+     * This index is used to access the birthdate information of the patient.
      */
     public static final int PATIENT_INDEX_BIRTHDATE = 1;
 
@@ -40,7 +40,7 @@ public class PatientDaoCsvConstants {
     public static final int PATIENT_INDEX_PSYCOLOGIST = 2;
     /**
      * Message prefix used when a patient cannot be found in the database.
-     * This is utilized to construct error messages for better error handling.
+     * This is used to construct error messages for better error handling.
      */
     public static final String PATIENT_NOT_FOUND = "Patient not found: ";
 }

@@ -78,6 +78,15 @@ public class Psychologist extends User {
     }
 
     /**
+     * Sets the list of patients.
+     *
+     * @param patients the list of patients to be set
+     */
+    public void setPatients(List<Patient> patients) {
+        this.patients = patients;
+    }
+
+    /**
      * Confirms an appointment for a specific patient, ensuring that the appointment does not
      * conflict with existing appointments and that the patient is under the care of this psychologist.
      *
