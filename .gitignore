@@ -14,7 +14,7 @@ bin/
 hs_err_pid*
 
 # File della cache di IntelliJ
-.idea/
+.idea
 .idea/workspace.xml
 .idea/libraries/
 .idea/modules.xml
