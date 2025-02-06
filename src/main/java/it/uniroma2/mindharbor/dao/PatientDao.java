@@ -4,6 +4,7 @@ import it.uniroma2.mindharbor.beans.PatientBean;
 import it.uniroma2.mindharbor.beans.UserBean;
 import it.uniroma2.mindharbor.exception.DAOException;
 import it.uniroma2.mindharbor.model.Patient;
+import it.uniroma2.mindharbor.model.Psychologist;
 
 import java.util.List;
 
@@ -31,11 +32,11 @@ public interface PatientDao {
      * Retrieves patient details from the persistence layer based on the username.
      * <p>
      * The method searches for a patient with the specified username and returns a
-     * {@link PatientBean} object. If no match is found, {@code null} is returned.
+     * {@link Patient} object. If no match is found, {@code null} is returned.
      * </p>
      *
      * @param username The username of the patient to retrieve.
-     * @return A {@link PatientBean} object if found, otherwise {@code null}.
+     * @return A {@link Patient} object if found, otherwise {@code null}.
      * @throws DAOException If an error occurs while accessing the data storage.
      */
     public Patient retrievePatient(String username) throws DAOException;
@@ -44,16 +45,16 @@ public interface PatientDao {
      * Retrieves a list of patients assigned to a specific psychologist.
      * <p>
      * This method searches the patient database for records where the psychologist's username
-     * matches the specified value. It returns a list of {@link PatientBean} objects
+     * matches the specified value. It returns a list of {@link Patient} objects
      * representing the patients under the psychologist's care.
      * </p>
      *
-     * @param psychologist The username of the psychologist whose patients are to be retrieved.
-     * @return A list of {@link PatientBean} objects representing the patients assigned to the psychologist.
+     * @param psychologist The {@link Psychologist} who needs to get his list of patients.
+     * @return A list of {@link Patient} objects representing the patients assigned to the psychologist.
      * If no patients are found, the list will be empty.
      * @throws DAOException If an error occurs while accessing the data storage.
      */
-    public List<PatientBean> retrivePatientsByPsychologist(String psychologist) throws DAOException;
+    public List<Patient> retrievePatientsByPsychologist(Psychologist psychologist) throws DAOException;
 
     /**
      * Updates an existing patient's details in the persistence layer.

@@ -4,6 +4,7 @@ import it.uniroma2.mindharbor.beans.PatientBean;
 import it.uniroma2.mindharbor.beans.PsychologistBean;
 import it.uniroma2.mindharbor.beans.UserBean;
 import it.uniroma2.mindharbor.exception.DAOException;
+import it.uniroma2.mindharbor.model.Patient;
 import it.uniroma2.mindharbor.model.Psychologist;
 
 import java.util.List;
@@ -57,9 +58,9 @@ public interface PsychologistDao {
      * the complete list of patients and filter those that are associated with the specified psychologist.
      * </p>
      *
-     * @param psychologistUsername the username of the psychologist for whom to retrieve the patient list.
-     * @return a list of {@link PatientBean} containing the associated patients.
+     * @param psychologist the {@link Psychologist} that want retrive the patients list
+     * @return a list of {@link Patient} containing the associated patients.
      * @throws DAOException if an error occurs during data access.
      */
-    List<PatientBean> getPatients(String psychologistUsername) throws DAOException;
+    List<Patient> getPatients(Psychologist psychologist) throws DAOException;
 }
