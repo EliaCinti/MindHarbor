@@ -10,15 +10,15 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/Login_style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.mindharbor.graphic_controllers.LoginGraphicController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/Login_style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.mindharbor.graphic_controller.LoginGraphicController">
     <Pane prefHeight="50" prefWidth="600">
     </Pane>
     <ImageView fitHeight="419.0" fitWidth="728.0" layoutX="-65.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true">
         <Image url="@../Img/sondo.png" />
     </ImageView>
     <TextField fx:id="usernameTextField" layoutX="209.0" layoutY="177.0" prefHeight="26.0" prefWidth="149.0" promptText="Username" styleClass="username-field" />
-    <PasswordField fx:id="enterPasswordField" layoutX="209.0" layoutY="220.0" prefHeight="26.0" prefWidth="170.0" promptText="Password" styleClass="password-field" />
-    <Button fx:id="accediButton" alignment="CENTER" contentDisplay="CENTER" layoutX="256.0" layoutY="277.0" mnemonicParsing="false" onAction="#onLoginClick" prefHeight="26.0" prefWidth="98.0" styleClass="access_button" text="SIGN IN" textAlignment="CENTER" />
+    <PasswordField fx:id="passwordTextField" layoutX="209.0" layoutY="220.0" prefHeight="26.0" prefWidth="170.0" promptText="Password" styleClass="password-field" />
+    <Button fx:id="loginButton" alignment="CENTER" contentDisplay="CENTER" layoutX="256.0" layoutY="277.0" mnemonicParsing="false" onAction="#onSignInClick" prefHeight="26.0" prefWidth="98.0" styleClass="access_button" text="SIGN IN" textAlignment="CENTER" />
     <Label fx:id="msgLbl" alignment="CENTER" layoutX="164.0" layoutY="259.0" prefHeight="18.0" prefWidth="272.0" textFill="WHITE">
     </Label>
     <Label alignment="CENTER" layoutX="239.0" layoutY="332.0" prefHeight="18.0" prefWidth="113.0" text="Sign in with" textFill="WHITE" />
