@@ -1,0 +1,95 @@
+/* Stile base per il pulsante Accedi */
+.access_button {
+    /* Proprietà utili per JavaFX */
+    -fx-background-color: linear-gradient(to right, #4caf50, #66bb6a); /* Colore verde moderno */
+    -fx-text-fill: white;
+    -fx-font-size: 16px; /* Dimensione del testo */
+    -fx-padding: 10px 20px; /* Spaziatura interna */
+    -fx-border-radius: 20px; /* Arrotondamento degli angoli */
+    -fx-background-radius: 20px;
+    -fx-cursor: hand; /* Mostra la mano al passaggio del mouse */
+    -fx-transition: all 0.3s ease-in-out; /* Effetto transizione fluido */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.4, 0, 2); /* Ombra moderna */
+    /* */
+}
+
+/* Stile hover (quando il mouse passa sopra il pulsante) */
+.access_button:hover {
+    /* Proprietà utili per JavaFX */
+    -fx-background-color: linear-gradient(to right, #43a047, #66bb6a); /* Colore più luminoso */
+    -fx-scale-x: 1.1; /* Effetto di zoom leggero */
+    -fx-scale-y: 1.1;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0.5, 0, 3);
+    /* */
+}
+
+/* Stile per lo stato premuto (click del mouse) */
+.access_button:pressed {
+    /* Proprietà utili per JavaFX */
+    -fx-background-color: #2e7d32; /* Colore ancora più scuro per il click */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0.5, 0, 2); /* Ombra ridotta */
+    -fx-scale-x: 1.0; /* Torna alla dimensione originale */
+    -fx-scale-y: 1.0;
+    /**/
+}
+
+/* Stile per il campo username */
+.username-field {
+     /* Proprietà utili per JavaFX */
+    -fx-background-color: white;
+    -fx-border-color: #bdc3c7; /* Colore del bordo */
+    -fx-border-radius: 20px; /* Arrotondamento ovale */
+    -fx-background-radius: 20px; /* Arrotondamento dello sfondo */
+    -fx-pref-height: 30px; /* Altezza più sottile */
+    -fx-pref-width: 200px; /* Larghezza */
+    -fx-padding: 0 15px; /* Spaziatura interna (verticale e orizzontale) */
+    -fx-font-size: 12px; /* Testo più piccolo */
+    -fx-text-fill: #333; /* Colore del testo */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.3, 0, 1); /* Ombra sottile */
+    /* */
+}
+
+/* Stile per il campo password */
+.password-field {
+    /* Proprietà utili per JavaFX */
+    -fx-background-color: white;
+    -fx-border-color: #bdc3c7; /* Colore del bordo */
+    -fx-border-radius: 20px; /* Arrotondamento ovale */
+    -fx-background-radius: 20px;
+    -fx-pref-height: 30px; /* Altezza più sottile */
+    -fx-pref-width: 200px; /* Larghezza */
+    -fx-padding: 0 15px;
+    -fx-font-size: 12px;
+    -fx-text-fill: #333;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.3, 0, 1);
+    /* */
+}
+
+/* Hover per entrambi */
+.username-field:hover, .password-field:hover {
+    /* Proprietà utili per JavaFX */
+    -fx-border-color: #4A90E2; /* Colore del bordo al passaggio del mouse */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.4, 0, 1);
+    /* */
+}
+
+/* Focus per entrambi */
+.username-field:focused, .password-field:focused {
+    /* Proprietà utili per JavaFX */
+    -fx-border-color: #5A68E2; /* Colore del bordo al focus */
+    -fx-background-color: #f9f9f9; /* Sfondo leggermente più chiaro */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.4, 0, 1);
+    /* */
+}
+
+/* Stile per il titolo MINDHARBOR */
+.title-text {
+    -fx-font-family: "KoHo Light"; /* Font ultra-sottile */
+    -fx-font-size: 26px; /* Grandezza equilibrata */
+    -fx-text-fill: white; /* Testo bianco */
+    -fx-letter-spacing: 10px; /* Maggiore spaziatura tra lettere */
+    -fx-font-weight: 200; /* Ultra sottile */
+    -fx-text-alignment: center; /* Centrare il testo */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 3, 0.3, 0, 1); /* Ombra sottile */
+    -fx-text-fill: rgba(255, 255, 255, 0.8); /* Bianco semi-trasparente */
+}
