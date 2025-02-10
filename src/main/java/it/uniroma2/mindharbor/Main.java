@@ -1,9 +1,10 @@
 package it.uniroma2.mindharbor;
 
+import it.uniroma2.mindharbor.patterns.facade.DaoFactoryFacade;
+import it.uniroma2.mindharbor.patterns.facade.PersistenceType;
 import it.uniroma2.mindharbor.utilities.NavigatorSingleton;
 import javafx.application.Application;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 
@@ -32,13 +33,33 @@ public class Main extends Application {
     }
 
     /**
-     * The main method that launches the application.
-     * This method is called when the application starts from the command line.
+     * Main method to configure the application settings based on command-line arguments and launch the application.
+     * This method determines the persistence type and interface type based on the arguments provided.
      *
-     * @param args the command line arguments passed to the application.
-     * It is not used within this application.
+     * @param args Command-line arguments to configure the application:
+     *             args[0]: Optional.
+     *             Specify the persistence type.
+     *             Default is "mysql".
+     *             Args[1]: Optional.
+     *             Specify the interface type.
+     *             Default is "gui".
      */
     public static void main(String[] args) {
-        launch(args);
+        DaoFactoryFacade daoFactoryFacade = DaoFactoryFacade.getInstance();
+
+        String persistenceType = args.length > 0 ? args[0].toLowerCase() : "mysql";
+        String interfaceType = args.length > 1 ? args[1].toLowerCase() : "gui";
+
+        if ("mysql".equals(persistenceType)) {
+            daoFactoryFacade.setPersistenceType(PersistenceType.MYSQL);
+        } else {
+            daoFactoryFacade.setPersistenceType(PersistenceType.CSV);
+        }
+
+        if ("gui".equals(interfaceType)) {
+            launch(args);
+        } else {
+            // @TODO Placeholder for CLI logic
+        }
     }
 }

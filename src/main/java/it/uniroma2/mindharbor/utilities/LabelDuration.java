@@ -1,6 +1,7 @@
 package it.uniroma2.mindharbor.utilities;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
 /**
@@ -16,18 +17,24 @@ public class LabelDuration {
      * @param message  The message to display on the label during the transition.
      */
     public void duration(Label label, String message) {
-        Duration duration = Duration.seconds(5); // Defines the duration of both the fade-in and fade-out effects.
-        FadeTransition fadeIn = new FadeTransition(duration, label);
-        fadeIn.setFromValue(0.0); // Start fully transparent.
-        fadeIn.setToValue(1.0);   // End fully opaque.
+        Duration fadeInDuration = Duration.millis(1000);  // Durata dell'effetto di fade-in
+        Duration fadeOutDuration = Duration.millis(1000);  // Durata dell'effetto di fade-out
+        Duration visibleDuration = Duration.seconds(3);  // Durata della visibilità del messaggio
 
-        FadeTransition fadeOut = new FadeTransition(duration, label);
-        fadeOut.setFromValue(1.0); // Start fully opaque.
-        fadeOut.setToValue(0.0);   // End fully transparent.
+        label.setText(message);
 
-        label.setText(message); // Set the text of the label to the provided message.
+        FadeTransition fadeIn = new FadeTransition(fadeInDuration, label);
+        fadeIn.setFromValue(0.0);
+        fadeIn.setToValue(1.0);
+        fadeIn.setInterpolator(Interpolator.EASE_IN);
 
-        fadeIn.play(); // Start the fade-in effect.
-        fadeIn.setOnFinished(event -> fadeOut.play()); // Once fade-in completing, start fade-out.
+        FadeTransition fadeOut = new FadeTransition(fadeOutDuration, label);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        fadeOut.setInterpolator(Interpolator.EASE_OUT);
+        fadeOut.setDelay(visibleDuration);  // Imposta il ritardo prima del fade-out
+
+        fadeIn.play();
+        fadeIn.setOnFinished(event -> fadeOut.play());
     }
 }
