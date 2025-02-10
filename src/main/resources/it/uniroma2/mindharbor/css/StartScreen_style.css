@@ -1,0 +1,51 @@
+/* Stile per i bottoni */
+.button {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease-in-out;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.4, 0, 2);
+}
+
+/* Stile per il sign in */
+.signIn_button {
+    -fx-background-color: linear-gradient(to right, #4caf50, #66bb6a);
+}
+
+/* stile per il sign up */
+.signUp_button {
+    -fx-background-color: linear-gradient(to right, #309133, #366f39);
+}
+
+/* Stile hover (quando il mouse passa sopra il pulsante) */
+.button:hover {
+    -fx-background-color: linear-gradient(to right, #43a047, #66bb6a);
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0.5, 0, 3);
+}
+
+
+/* Stile per lo stato premuto (click del mouse) */
+.button:pressed {
+    -fx-background-color: #2e7d32;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0.5, 0, 2);
+    -fx-scale-x: 1.0;
+    -fx-scale-y: 1.0;
+}
+
+/* Stile per il titolo MINDHARBOR */
+.title-text {
+    -fx-font-family: "KoHo Light";
+    -fx-font-size: 26px;
+    -fx-text-fill: white;
+    -fx-letter-spacing: 10px;
+    -fx-font-weight: 200;
+    -fx-text-alignment: center;
+    -fx-translate-x: -10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 3, 0.3, 0, 1);
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
