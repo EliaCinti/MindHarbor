@@ -5,7 +5,6 @@
     -fx-padding: 10px 15px;
     -fx-border-radius: 20px;
     -fx-background-radius: 20px;
-    -fx-cursor: hand;
     -fx-transition: all 0.3s ease-in-out;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.4, 0, 2);
 }
@@ -13,11 +12,13 @@
 /* Stile per il sign in */
 .signIn_button {
     -fx-background-color: linear-gradient(to right, #4caf50, #66bb6a);
+    -fx-cursor: hand;
 }
 
 /* stile per il sign up */
 .signUp_button {
     -fx-background-color: linear-gradient(to right, #309133, #366f39);
+    -fx-cursor: hand;
 }
 
 /* Stile hover (quando il mouse passa sopra il pulsante) */

@@ -27,6 +27,8 @@ import java.util.logging.Logger;
  */
 public class LoginGraphicController {
     @FXML
+    public Label backButton;
+    @FXML
     private Label msgLbl;
     @FXML
     private TextField usernameTextField;
@@ -83,6 +85,20 @@ public class LoginGraphicController {
         } catch (UserSessionException e) {
             logger.log(Level.INFO, "User " + usernname + "already logged in", e);
             new LabelDuration().duration(msgLbl, "User already logged in");
+        }
+    }
+
+    /**
+     * Navigates to the start screen.
+     */
+    @FXML
+    private void onBackButtonClicked() {
+        try {
+            Stage stage = (Stage) loginButton.getScene().getWindow();
+            stage.close();
+            navigatorSingleton.gotoPage("/it/uniroma2/mindharbor/fxml/StartScreen.fxml");
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Unable to load patient home", e);
         }
     }
 

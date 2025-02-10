@@ -27,6 +27,7 @@
     -fx-scale-x: 1.0;
     -fx-scale-y: 1.0;
 }
+
 .input-field {
     -fx-background-color: white;
     -fx-border-color: #bdc3c7;
@@ -51,7 +52,7 @@
 
 /* Focus per entrambi */
 .input-field:focused {
-    -fx-border-color:#228B22;
+    -fx-border-color: #228B22;
     -fx-background-color: #f9f9f9;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.4, 0, 1);
 }
@@ -73,11 +74,18 @@
     -fx-translate-y: -5;
     -fx-font-weight: bold;
     -fx-font-family: "KoHo Light";
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
 }
 
 .sign-in-with {
     -fx-font-weight: bold;
     -fx-font-family: "KoHo Light";
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
+}
+
+.back-button {
+    -fx-translate-x: 55px;
+    -fx-translate-y: 170px;
+    -fx-background-color: transparent; /* Rende lo sfondo del bottone trasparente */
+    -fx-padding: 20;
 }

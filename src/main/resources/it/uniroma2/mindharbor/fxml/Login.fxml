@@ -19,9 +19,9 @@
     <TextField fx:id="usernameTextField" layoutX="209.0" layoutY="177.0" prefHeight="26.0" prefWidth="149.0" promptText="Username" styleClass="input-field" />
     <PasswordField fx:id="passwordTextField" layoutX="209.0" layoutY="220.0" prefHeight="26.0" prefWidth="170.0" promptText="Password" styleClass="input-field" />
     <Button fx:id="loginButton" alignment="CENTER" contentDisplay="CENTER" layoutX="256.0" layoutY="277.0" mnemonicParsing="false" onAction="#onSignInClick" prefHeight="26.0" prefWidth="98.0" styleClass="access_button" text="SIGN IN" textAlignment="CENTER" />
-    <Label fx:id="msgLbl" alignment="CENTER" layoutX="164.0" layoutY="259.0" prefHeight="18.0" prefWidth="272.0" textFill="WHITE" styleClass="msg-label">
+    <Label fx:id="msgLbl" alignment="CENTER" layoutX="164.0" layoutY="259.0" prefHeight="18.0" prefWidth="272.0" styleClass="msg-label" textFill="WHITE">
     </Label>
-    <Label alignment="CENTER" layoutX="239.0" layoutY="332.0" prefHeight="18.0" prefWidth="113.0" text="Sign in with" textFill="WHITE" styleClass="sign-in-with"/>
+    <Label alignment="CENTER" layoutX="239.0" layoutY="332.0" prefHeight="18.0" prefWidth="113.0" styleClass="sign-in-with" text="Sign in with" textFill="WHITE" />
     <ImageView fitHeight="66.0" fitWidth="20.0" layoutX="336.0" layoutY="331.0" pickOnBounds="true" preserveRatio="true">
         <Image url="@../Img/IconaLoginGoogle.png" />
     </ImageView>
@@ -30,4 +30,11 @@
          <Font name="KoHo Light" size="25.0" />
       </font>
    </Label>
+    <Label fx:id="backButton" onMouseClicked="#onBackButtonClicked" styleClass="back-button">
+        <graphic>
+            <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="76.0" layoutY="187.0">
+                <Image url="@../Img/bigBackArrow-v2.png" />
+            </ImageView>
+        </graphic>
+    </Label>
 </AnchorPane>
