@@ -8,21 +8,27 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@StartScreen_style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.mindharbor.graphic_controllers.LoginGraphicController">
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/StartScreen_style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.mindharbor.graphic_controller.StartScreenGraphicController">
     <Pane prefHeight="50" prefWidth="600">
     </Pane>
     <ImageView fitHeight="419.0" fitWidth="728.0" layoutX="-65.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true">
-        <Image url="@../../../../Img/sondo.png" />
+        <Image url="@../Img/sondo.png" />
     </ImageView>
-    <Button fx:id="accediButton" layoutX="256.0" layoutY="187.0" mnemonicParsing="false" onAction="#onLoginClick" prefHeight="26.0" prefWidth="98.0" text="Sign In">
+    <Button fx:id="signInButton" layoutX="256.0" layoutY="187.0" mnemonicParsing="false" onAction="#onSignInButtonClicked" prefHeight="26.0" prefWidth="98.0" text="SIGN IN">
       <styleClass>
          <String fx:value="button" />
          <String fx:value="signIn_button" />
       </styleClass></Button>
-   <Button fx:id="accediButton1" layoutX="256.0" layoutY="236.0" mnemonicParsing="false" onAction="#onLoginClick" prefHeight="26.0" prefWidth="98.0" text="Sign Up">
+   <Button fx:id="signUpButton" alignment="CENTER" layoutX="256.0" layoutY="236.0" mnemonicParsing="false" onAction="#onSignUpButtonClicked" prefHeight="26.0" prefWidth="98.0" text="SIGN UP">
       <styleClass>
          <String fx:value="button" />
          <String fx:value="signUp_button" />
       </styleClass></Button>
-   <Text fill="WHITE" layoutX="200.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title-text" text="MINDHARBOR" textAlignment="CENTER" wrappingWidth="229.25390625" />
+    <Label alignment="CENTER" layoutX="113.0" layoutY="135.0" prefHeight="34.0" prefWidth="390.0" styleClass="title-text" text="MINDHARBOR" textAlignment="CENTER" textFill="WHITE">
+        <font>
+            <Font name="KoHo Light" size="25.0" />
+        </font>
+    </Label>
 </AnchorPane>

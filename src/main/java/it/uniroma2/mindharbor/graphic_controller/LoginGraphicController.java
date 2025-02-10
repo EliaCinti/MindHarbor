@@ -89,11 +89,11 @@ public class LoginGraphicController {
     /**
      * Navigates to the patient's home screen.
      */
-    public void homePatient() {
+    private void homePatient() {
         try {
             Stage stage = (Stage) loginButton.getScene().getWindow();
             stage.close();
-            navigatorSingleton.gotoPage("/it/uniroma2/mindharbor/HomePatient.fxml");
+            navigatorSingleton.gotoPage("/it/uniroma2/mindharbor/fxml/HomePatient.fxml");
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Unable to load patient home", e);
         }
@@ -102,11 +102,11 @@ public class LoginGraphicController {
     /**
      * Navigates to the psychologist's home screen.
      */
-    public void homePsychologist() {
+    private void homePsychologist() {
         try {
             Stage stage = (Stage) loginButton.getScene().getWindow();
             stage.close();
-            navigatorSingleton.gotoPage("/it/uniroma2/mindharbor/HomePsychologist.fxml");
+            navigatorSingleton.gotoPage("/it/uniroma2/mindharbor/fxml/HomePsychologist.fxml");
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Unable to load psychologist home", e);
         }

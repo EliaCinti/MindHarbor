@@ -29,7 +29,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         NavigatorSingleton navigator = NavigatorSingleton.getInstance(primaryStage);
-        navigator.gotoPage("/it/uniroma2/mindharbor/fxml/Login.fxml");
+        navigator.gotoPage("/it/uniroma2/mindharbor/fxml/StartScreen.fxml");
     }
 
     /**
