@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/SignUp_style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.mindharbor.graphic_controller.SignUpPsychologistGraphicController">
+    <Pane prefHeight="50" prefWidth="600">
+    </Pane>
+    <ImageView fitHeight="419.0" fitWidth="728.0" layoutX="-65.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true">
+        <Image url="@../Img/sondo.png" />
+    </ImageView>
+    <TextField fx:id="Psychologist" editable="false" layoutX="209.0" layoutY="177.0" prefHeight="26.0" prefWidth="149.0" styleClass="input-field" text="Psychologist" />
+    <PasswordField fx:id="officeTextField" layoutX="209.0" layoutY="211.0" prefHeight="26.0" prefWidth="170.0" promptText="Office" styleClass="input-field" />
+    <Button fx:id="signUpButton" alignment="CENTER" contentDisplay="CENTER" layoutX="248.0" layoutY="316.0" mnemonicParsing="false" onAction="#onSignUpClick" prefHeight="40.0" prefWidth="104.0" styleClass="access_button" text="SIGN UP" textAlignment="CENTER" />
+    <Label fx:id="msgLbl" alignment="CENTER" layoutX="96.0" layoutY="291.0" prefHeight="18.0" prefWidth="427.0" styleClass="msg-label" textFill="WHITE">
+    </Label>
+   <Label alignment="CENTER" layoutX="113.0" layoutY="135.0" prefHeight="34.0" prefWidth="390.0" styleClass="title-text" text="MINDHARBOR" textAlignment="CENTER" textFill="WHITE">
+      <font>
+         <Font name="KoHo Light" size="25.0" />
+      </font>
+   </Label>
+   <PasswordField fx:id="hourlyCostTextField1" layoutX="209.0" layoutY="246.0" prefHeight="26.0" prefWidth="170.0" promptText="Hourly Cost" styleClass="input-field" />
+    <Label fx:id="backButton" onMouseClicked="#onBackButtonClicked" styleClass="back-button">
+        <graphic>
+            <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="76.0" layoutY="187.0">
+                <Image url="@../Img/bigBackArrow-v2.png" />
+            </ImageView>
+        </graphic>
+    </Label>
+</AnchorPane>
