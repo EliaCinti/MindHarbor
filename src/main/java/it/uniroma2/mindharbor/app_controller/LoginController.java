@@ -32,19 +32,12 @@ public class LoginController extends AbstractController {
      */
     public User login(CredentialsBean credentials) throws DAOException, UserSessionException {
 
-        UserType userType;
-        try {
-            userType = UserType.valueOf(credentials.getType().toUpperCase());
-        } catch (IllegalArgumentException | NullPointerException e) {
-            throw new DAOException("Invalid user type provided: " + credentials.getType(), e);
-        }
-
         DaoFactoryFacade daoFactoryFacade = DaoFactoryFacade.getInstance();
         UserDao userDao = daoFactoryFacade.getUserDao();
         userDao.validateUser(credentials);
 
         if (credentials.getType() != null) {
-            if (userType == UserType.PATIENT) {
+            if (credentials.getType().equalsIgnoreCase(String.valueOf(UserType.PATIENT))) {
                 // Handle login for a patient
                 PatientDao patientDao = daoFactoryFacade.getPatientDao();
                 Patient patient = patientDao.retrievePatient(credentials.getUsername());

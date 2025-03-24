@@ -51,6 +51,15 @@ public interface UserDao {
     String[] retrieveUser(String username) throws DAOException;
 
     /**
+     * Verifica se un username è già presente nel sistema.
+     *
+     * @param username L'username da verificare
+     * @return true se l'username è già in uso, false altrimenti
+     * @throws DAOException Se si verifica un errore durante l'accesso ai dati
+     */
+    boolean isUsernameTaken(String username) throws DAOException;
+
+    /**
      * Updates an existing user's details in the persistence layer.
      * <p>
      * If the user does not exist, a {@link DAOException} is thrown.

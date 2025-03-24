@@ -94,8 +94,7 @@ public class SignUpGraphicController {
             return;
         }
 
-        // Password validation (minimum 8 characters, at least one uppercase, one number)
-        if (!isValidPassword(password)) {
+        if (!signUpController.isValidPassword(password)) {
             new LabelDuration().duration(msgLbl, "Password must be at least 8 characters with uppercase and number");
             return;
         }
@@ -111,11 +110,11 @@ public class SignUpGraphicController {
 
             Stage stage = (Stage) loginButton.getScene().getWindow();
             stage.close();
-
             // Navigate to the specific form based on user type
-            if ("PATIENT".equals(selectedType)) {
+            if ("PATIENT".equalsIgnoreCase(selectedType)) {
+
                 navigatorSingleton.gotoPage("/it/uniroma2/mindharbor/fxml/SignUpPatient.fxml");
-            } else if ("PSYCHOLOGIST".equals(selectedType)) {
+            } else if ("PSYCHOLOGIST".equalsIgnoreCase(selectedType)) {
                 navigatorSingleton.gotoPage("/it/uniroma2/mindharbor/fxml/SignUpPsychologist.fxml");
             }
         } catch (IOException e) {
@@ -141,24 +140,4 @@ public class SignUpGraphicController {
         }
     }
 
-    /**
-     * Validates that the password meets the minimum security requirements.
-     *
-     * @param password The password to validate
-     * @return true if the password is valid, false otherwise
-     */
-    private boolean isValidPassword(String password) {
-        // At least 8 characters
-        if (password.length() < 8) {
-            return false;
-        }
-
-        // At least one uppercase letter
-        boolean hasUppercase = !password.equals(password.toLowerCase());
-
-        // At least one number
-        boolean hasNumber = password.matches(".*\\d.*");
-
-        return hasUppercase && hasNumber;
-    }
 }

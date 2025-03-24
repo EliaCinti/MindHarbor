@@ -34,8 +34,8 @@
     -fx-border-radius: 20px;
     -fx-border-width: 1px;
     -fx-background-radius: 20px;
-    -fx-pref-height: 28px;
-    -fx-pref-width: 160px;
+    -fx-pref-height: 30px;
+    -fx-pref-width: 153px;
     -fx-padding: 0 10px;
     -fx-font-size: 11px;
     -fx-text-fill: #222;
@@ -83,7 +83,6 @@
     -fx-translate-y: 170px;
     -fx-background-color: transparent;
     -fx-padding: 20;
-    -fx-cursor: hand;
 }
 
 /* Stile per i ComboBox */

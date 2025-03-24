@@ -49,6 +49,19 @@ public class UserDaoMySql implements UserDao {
     }
 
     @Override
+    public boolean isUsernameTaken(String username) throws DAOException {
+        try {
+            Connection connection = ConnectionManager.getConnection();
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM Users WHERE Username = ?");
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            return rs.next(); // true se esiste una riga con quell'username
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage());
+        }
+    }
+
+    @Override
     public void updateUser(UserBean user) throws DAOException {
         // TODO: Implement the SQL UPDATE query to update user details.
     }

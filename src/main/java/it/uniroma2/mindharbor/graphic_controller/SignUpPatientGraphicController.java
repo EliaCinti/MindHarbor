@@ -100,7 +100,6 @@ public class SignUpPatientGraphicController {
 
             // Register patient through application controller
             User registeredUser = signUpController.registerPatient(patientBean);
-
             if (registeredUser != null) {
                 // Clear data from singleton after successful registration
                 SignUpDataSingleton.getInstance().clearUserData();

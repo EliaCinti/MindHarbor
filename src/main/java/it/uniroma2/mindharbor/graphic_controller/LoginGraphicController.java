@@ -55,18 +55,17 @@ public class LoginGraphicController {
      */
     @FXML
     private void onSignInClick() {
-        String usernname = usernameTextField.getText();
+        String username = usernameTextField.getText();
         String password = passwordTextField.getText();
 
-        if (usernname.isEmpty() || password.isEmpty()) {
+        if (username.isEmpty() || password.isEmpty()) {
             msgLbl.setText("Please enter your username and password");
             return;
         }
         try {
             CredentialsBean credentials = new CredentialsBean.Builder<>()
-                    .username(usernname)
+                    .username(username)
                     .password(password)
-                    .type("null")
                     .build();
 
             User loggedUser = loginController.login(credentials);
@@ -80,10 +79,10 @@ public class LoginGraphicController {
                 }
             }
         } catch (DAOException e) {
-            logger.log(Level.SEVERE, "Error while logging in" + usernname, e);
+            logger.log(Level.SEVERE, e, () -> String.format("Error while logging in %s", username));
             new LabelDuration().duration(msgLbl, "Login failed");
         } catch (UserSessionException e) {
-            logger.log(Level.INFO, "User " + usernname + "already logged in", e);
+            logger.log(Level.INFO, e, () -> String.format("User %s already logged in", username));
             new LabelDuration().duration(msgLbl, "User already logged in");
         }
     }

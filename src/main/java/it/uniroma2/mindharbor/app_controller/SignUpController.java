@@ -58,16 +58,37 @@ public class SignUpController extends AbstractController {
     }
 
     /**
-     * Verifica se l'username è già presente nel sistema.
+     * Checks if the username is available for registration.
      *
-     * @param username Lo username da verificare
-     * @return true se lo username è disponibile, false se è già in uso
-     * @throws DAOException Se si verifica un errore durante l'accesso ai dati
+     * @param username The username to check
+     * @return true if the username is available, false if it's already in use
+     * @throws DAOException If an error occurs while accessing the data
      */
     public boolean isUsernameAvailable(String username) throws DAOException {
         DaoFactoryFacade daoFactoryFacade = DaoFactoryFacade.getInstance();
         UserDao userDao = daoFactoryFacade.getUserDao();
-        return userDao.retrieveUser(username) == null;
+        return !userDao.isUsernameTaken(username);
+    }
+
+    /**
+     * Validates that the password meets the minimum security requirements.
+     *
+     * @param password The password to validate
+     * @return true if the password is valid, false otherwise
+     */
+    public boolean isValidPassword(String password) {
+        // At least 8 characters
+        if (password.length() < 8) {
+            return false;
+        }
+
+        // At least one uppercase letter
+        boolean hasUppercase = !password.equals(password.toLowerCase());
+
+        // At least one number
+        boolean hasNumber = password.matches(".*\\d.*");
+
+        return hasUppercase && hasNumber;
     }
 
     /**

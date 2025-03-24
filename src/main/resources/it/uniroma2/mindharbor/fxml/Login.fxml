@@ -30,11 +30,13 @@
          <Font name="KoHo Light" size="25.0" />
       </font>
    </Label>
-    <Label fx:id="backButton" onMouseClicked="#onBackButtonClicked" styleClass="back-button">
-        <graphic>
-            <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="76.0" layoutY="187.0">
-                <Image url="@../Img/bigBackArrow-v2.png" />
-            </ImageView>
-        </graphic>
-    </Label>
+   <Label fx:id="backButton" layoutX="10.0" layoutY="10.0" onMouseClicked="#onBackButtonClicked" styleClass="back-button">
+      <graphic>
+         <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="76.0" layoutY="187.0">
+            <image>
+               <Image url="@../Img/bigBackArrow-v2.png" />
+            </image>
+         </ImageView>
+      </graphic>
+   </Label>
 </AnchorPane>

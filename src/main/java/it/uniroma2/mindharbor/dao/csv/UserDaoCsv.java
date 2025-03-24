@@ -6,6 +6,7 @@ import it.uniroma2.mindharbor.dao.UserDao;
 import it.uniroma2.mindharbor.dao.csv.constants.UserDaoCsvConstants;
 import it.uniroma2.mindharbor.exception.DAOException;
 import it.uniroma2.mindharbor.utilities.CsvUtilities;
+import it.uniroma2.mindharbor.utilities.PasswordUtils;
 
 import java.io.File;
 import java.util.List;
@@ -20,33 +21,43 @@ public class UserDaoCsv implements UserDao {
 
     @Override
     public void validateUser(CredentialsBean credentials) throws DAOException {
-
         String[] userRecord = retrieveUser(credentials.getUsername());
-        if (userRecord != null && credentials.getPassword().equals(userRecord[UserDaoCsvConstants.USER_INDEX_PASSWORD])) {
-            credentials.setType(userRecord[UserDaoCsvConstants.USER_INDEX_TYPE]);
+        if (userRecord != null) {
+            String storedHashedPassword = userRecord[UserDaoCsvConstants.USER_INDEX_PASSWORD];
+
+            // check the password by BCrypt
+            if(PasswordUtils.checkPassword(credentials.getPassword(), storedHashedPassword)){
+                // Password OK
+                credentials.setType(userRecord[UserDaoCsvConstants.USER_INDEX_TYPE]);
+            }
         }
     }
 
     @Override
     public void saveUser(UserBean user) throws DAOException {
-        if (retrieveUser(user.getUsername()) != null) {
+        if (isUsernameTaken(user.getUsername())) {
             // esiste uno username uguale a quello che sto cercando di registrare
             throw new DAOException(UserDaoCsvConstants.USER_EXIST);
         }
+        // Hashing della password
+        String hashedPassword = PasswordUtils.hashPassword(user.getPassword());
+
         // non esiste, posso procedere
         String[] userRecord = new String[UserDaoCsvConstants.HEADER.length];
         userRecord[UserDaoCsvConstants.USER_INDEX_USERNAME] = user.getUsername();
-        userRecord[UserDaoCsvConstants.USER_INDEX_PASSWORD] = user.getPassword();
+        userRecord[UserDaoCsvConstants.USER_INDEX_PASSWORD] = hashedPassword;
         userRecord[UserDaoCsvConstants.USER_INDEX_FIRST_NAME] = user.getName();
         userRecord[UserDaoCsvConstants.USER_INDEX_LAST_NAME] = user.getSurname();
         userRecord[UserDaoCsvConstants.USER_INDEX_TYPE] = user.getType();
         userRecord[UserDaoCsvConstants.USER_INDEX_GENDER] = user.getGender();
+
         CsvUtilities.writeFile(fd, userRecord);
     }
 
     @Override
     public String[] retrieveUser(String username) throws DAOException {
         List<String[]> userTable = CsvUtilities.readAll(fd);
+
         String[] userRecord = null;
         while (!userTable.isEmpty()) {
             userRecord = userTable.removeFirst();
@@ -55,6 +66,29 @@ public class UserDaoCsv implements UserDao {
             }
         }
         return userRecord;
+    }
+
+    @Override
+    public boolean isUsernameTaken(String username) throws DAOException {
+        // Verifica se il file esiste
+        if (!fd.exists() || fd.length() == 0) {
+            return false; // Se il file non esiste o è vuoto, nessun username è preso
+        }
+        List<String[]> userTable = CsvUtilities.readAll(fd);
+
+        // Salta l'intestazione se presente
+        if (!userTable.isEmpty()) {
+            userTable.removeFirst();
+        }
+
+        // Cerca l'username nelle righe
+        for (String[] recordUser : userTable) {
+            if (recordUser.length > UserDaoCsvConstants.USER_INDEX_USERNAME &&
+                    username.equals(recordUser[UserDaoCsvConstants.USER_INDEX_USERNAME])) {
+                return true; // Username trovato, quindi è già preso
+            }
+        }
+        return false; // Username non trovato, è disponibile
     }
 
     @Override
