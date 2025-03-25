@@ -16,7 +16,7 @@
     <ImageView fitHeight="419.0" fitWidth="728.0" layoutX="-65.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true">
         <Image url="@../Img/sondo.png" />
     </ImageView>
-    <TextField fx:id="patientField" editable="false" layoutX="209.0" layoutY="177.0" prefHeight="26.0" prefWidth="149.0" styleClass="input-field" text="Patient" />
+    <TextField fx:id="patientField" editable="false" layoutX="209.0" layoutY="177.0" prefHeight="26.0" prefWidth="182.0" styleClass="input-field-patient" text="Patient" />
     <Button fx:id="signUpButton" alignment="CENTER" contentDisplay="CENTER" layoutX="248.0" layoutY="278.0" mnemonicParsing="false" onAction="#onSignUpClick" prefHeight="40.0" prefWidth="104.0" styleClass="access_button" text="SIGN UP" textAlignment="CENTER" />
     <Label fx:id="msgLbl" alignment="CENTER" layoutX="164.0" layoutY="256.0" prefHeight="18.0" prefWidth="272.0" styleClass="msg-label" textFill="WHITE">
     </Label>

@@ -59,7 +59,7 @@ public class LoginGraphicController {
         String password = passwordTextField.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
-            msgLbl.setText("Please enter your username and password");
+            new LabelDuration().duration(msgLbl, "Please enter your username and password");
             return;
         }
         try {

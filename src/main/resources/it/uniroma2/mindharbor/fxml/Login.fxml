@@ -30,7 +30,7 @@
          <Font name="KoHo Light" size="25.0" />
       </font>
    </Label>
-   <Label fx:id="backButton" layoutX="10.0" layoutY="10.0" onMouseClicked="#onBackButtonClicked" styleClass="back-button">
+   <Label fx:id="backButton" layoutY="5.0" onMouseClicked="#onBackButtonClicked" styleClass="back-button">
       <graphic>
          <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="76.0" layoutY="187.0">
             <image>
