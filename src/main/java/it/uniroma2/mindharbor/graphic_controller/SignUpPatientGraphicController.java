@@ -142,7 +142,7 @@ public class SignUpPatientGraphicController {
         try {
             Stage stage = (Stage) signUpButton.getScene().getWindow();
             stage.close();
-            navigatorSingleton.gotoPage("/it/uniroma2/mindharbor/fxml/HomePatient.fxml");
+            navigatorSingleton.gotoPage("/it/uniroma2/mindharbor/fxml/HomePagePatient.fxml");
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Unable to load patient home", e);
         }
