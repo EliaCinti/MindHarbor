@@ -2,6 +2,7 @@ package it.uniroma2.mindharbor.dao.mysql;
 
 import it.uniroma2.mindharbor.dao.AppointmentDao;
 import it.uniroma2.mindharbor.dao.ConnectionPoolManager;
+import it.uniroma2.mindharbor.dao.mysql.constants.AppointmentDaoMySqlConstants;
 import it.uniroma2.mindharbor.dao.mysql.constants.AppointmentDaoMySqlQueries;
 import it.uniroma2.mindharbor.exception.DAOException;
 import it.uniroma2.mindharbor.model.Appointment;
@@ -21,7 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * MySQL implementation of the {@link AppointmentDao} interface.
+ * MySQL's implementation of the {@link AppointmentDao} interface.
  * <p>
  * This class manages appointment data stored in a MySQL database, providing methods
  * to create, retrieve, update, and delete appointment records. All SQL queries are
@@ -57,12 +58,12 @@ public class AppointmentDaoMySql implements AppointmentDao {
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected == 0) {
-                throw new DAOException("Failed to save appointment, no rows affected.");
+                throw new DAOException(AppointmentDaoMySqlConstants.FAILED_TO_SAVE_APPOINTMENT);
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error saving appointment", e);
-            throw new DAOException("Error saving appointment: " + e.getMessage(), e);
+            logger.log(Level.SEVERE, AppointmentDaoMySqlConstants.ERROR_SAVING_APPOINTMENT, e);
+            throw new DAOException(AppointmentDaoMySqlConstants.ERROR_SAVING_APPOINTMENT + e.getMessage(), e);
         }
     }
 
@@ -89,8 +90,8 @@ public class AppointmentDaoMySql implements AppointmentDao {
             return null; // Appointment not found
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error retrieving appointment", e);
-            throw new DAOException("Error retrieving appointment: " + e.getMessage(), e);
+            logger.log(Level.SEVERE, AppointmentDaoMySqlConstants.ERROR_RETRIEVING_APPOINTMENT, e);
+            throw new DAOException(AppointmentDaoMySqlConstants.ERROR_RETRIEVING_APPOINTMENT + e.getMessage(), e);
         }
     }
 
@@ -117,8 +118,8 @@ public class AppointmentDaoMySql implements AppointmentDao {
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error retrieving appointments by patient", e);
-            throw new DAOException("Error retrieving appointments by patient: " + e.getMessage(), e);
+            logger.log(Level.SEVERE, AppointmentDaoMySqlConstants.ERROR_RETRIEVING_APPOINTMENTS_BY_PATIENT, e);
+            throw new DAOException(AppointmentDaoMySqlConstants.ERROR_RETRIEVING_APPOINTMENTS_BY_PATIENT + e.getMessage(), e);
         }
 
         return appointments;
@@ -147,8 +148,8 @@ public class AppointmentDaoMySql implements AppointmentDao {
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error retrieving appointments by psychologist", e);
-            throw new DAOException("Error retrieving appointments by psychologist: " + e.getMessage(), e);
+            logger.log(Level.SEVERE, AppointmentDaoMySqlConstants.ERROR_RETRIEVING_APPOINTMENTS_BY_PSYCHOLOGIST, e);
+            throw new DAOException(AppointmentDaoMySqlConstants.ERROR_RETRIEVING_APPOINTMENTS_BY_PSYCHOLOGIST + e.getMessage(), e);
         }
 
         return appointments;
@@ -177,8 +178,8 @@ public class AppointmentDaoMySql implements AppointmentDao {
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error retrieving appointments by date", e);
-            throw new DAOException("Error retrieving appointments by date: " + e.getMessage(), e);
+            logger.log(Level.SEVERE, AppointmentDaoMySqlConstants.ERROR_RETRIEVING_APPOINTMENTS_BY_DATE, e);
+            throw new DAOException(AppointmentDaoMySqlConstants.ERROR_RETRIEVING_APPOINTMENTS_BY_DATE + e.getMessage(), e);
         }
 
         return appointments;
@@ -207,8 +208,8 @@ public class AppointmentDaoMySql implements AppointmentDao {
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error retrieving unnotified appointments", e);
-            throw new DAOException("Error retrieving unnotified appointments: " + e.getMessage(), e);
+            logger.log(Level.SEVERE, AppointmentDaoMySqlConstants.ERROR_RETRIEVING_UNNOTIFIED_APPOINTMENTS, e);
+            throw new DAOException(AppointmentDaoMySqlConstants.ERROR_RETRIEVING_UNNOTIFIED_APPOINTMENTS + e.getMessage(), e);
         }
 
         return appointments;
@@ -233,12 +234,12 @@ public class AppointmentDaoMySql implements AppointmentDao {
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected == 0) {
-                throw new DAOException("Appointment not found: " + appointment.getId());
+                throw new DAOException(AppointmentDaoMySqlConstants.APPOINTMENT_NOT_FOUND + appointment.getId());
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error updating appointment", e);
-            throw new DAOException("Error updating appointment: " + e.getMessage(), e);
+            logger.log(Level.SEVERE, AppointmentDaoMySqlConstants.ERROR_UPDATING_APPOINTMENT, e);
+            throw new DAOException(AppointmentDaoMySqlConstants.ERROR_UPDATING_APPOINTMENT+ e.getMessage(), e);
         }
     }
 
@@ -259,12 +260,12 @@ public class AppointmentDaoMySql implements AppointmentDao {
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected == 0) {
-                throw new DAOException("Appointment not found: " + appointmentId);
+                throw new DAOException(AppointmentDaoMySqlConstants.APPOINTMENT_NOT_FOUND + appointmentId);
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error updating appointment notification status", e);
-            throw new DAOException("Error updating appointment notification status: " + e.getMessage(), e);
+            logger.log(Level.SEVERE, AppointmentDaoMySqlConstants.ERROR_UPDATING_APPOINTMENT_NOTIFICATION_STATUS, e);
+            throw new DAOException(AppointmentDaoMySqlConstants.ERROR_UPDATING_APPOINTMENT_NOTIFICATION_STATUS + e.getMessage(), e);
         }
     }
 
@@ -300,7 +301,7 @@ public class AppointmentDaoMySql implements AppointmentDao {
                     // Check if all updates were successful
                     for (int i = 0; i < results.length; i++) {
                         if (results[i] == 0) {
-                            throw new DAOException("Appointment not found: " + appointments.get(i).getId());
+                            throw new DAOException(AppointmentDaoMySqlConstants.APPOINTMENT_NOT_FOUND + appointments.get(i).getId());
                         }
                     }
 
@@ -312,23 +313,23 @@ public class AppointmentDaoMySql implements AppointmentDao {
                 try {
                     connection.rollback();
                 } catch (SQLException rollbackEx) {
-                    logger.log(Level.SEVERE, "Error rolling back transaction", rollbackEx);
+                    logger.log(Level.SEVERE, AppointmentDaoMySqlConstants.ERROR_ROLLING_BACK, rollbackEx);
                 }
 
-                logger.log(Level.SEVERE, "Error updating appointment notification statuses", e);
-                throw new DAOException("Error updating appointment notification statuses: " + e.getMessage(), e);
+                logger.log(Level.SEVERE, AppointmentDaoMySqlConstants.ERROR_UPDATING_APPOINTMENT_NOTIFICATION_STATUSES, e);
+                throw new DAOException(AppointmentDaoMySqlConstants.ERROR_UPDATING_APPOINTMENT_NOTIFICATION_STATUSES + e.getMessage(), e);
 
             } finally {
                 // Reset auto-commit mode before returning connection to pool
                 try {
                     connection.setAutoCommit(true);
                 } catch (SQLException resetEx) {
-                    logger.log(Level.WARNING, "Error resetting auto-commit", resetEx);
+                    logger.log(Level.WARNING, AppointmentDaoMySqlConstants.ERROR_RESETTING_AUTO_COMMIT, resetEx);
                 }
             }
         } catch (SQLException connectionEx) {
-            logger.log(Level.SEVERE, "Failed to obtain database connection", connectionEx);
-            throw new DAOException("Failed to obtain database connection: " + connectionEx.getMessage(), connectionEx);
+            logger.log(Level.SEVERE, AppointmentDaoMySqlConstants.FAILED_TO_OBTAIN_DATABASE_CONNECTION, connectionEx);
+            throw new DAOException(AppointmentDaoMySqlConstants.FAILED_TO_OBTAIN_DATABASE_CONNECTION + connectionEx.getMessage(), connectionEx);
         }
     }
 
@@ -347,12 +348,12 @@ public class AppointmentDaoMySql implements AppointmentDao {
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected == 0) {
-                throw new DAOException("Appointment not found: " + appointmentId);
+                throw new DAOException(AppointmentDaoMySqlConstants.APPOINTMENT_NOT_FOUND + appointmentId);
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error deleting appointment", e);
-            throw new DAOException("Error deleting appointment: " + e.getMessage(), e);
+            logger.log(Level.SEVERE, AppointmentDaoMySqlConstants.ERROR_DELETING_APPOINTMENT, e);
+            throw new DAOException(AppointmentDaoMySqlConstants.ERROR_DELETING_APPOINTMENT + e.getMessage(), e);
         }
     }
 
@@ -379,8 +380,8 @@ public class AppointmentDaoMySql implements AppointmentDao {
             return false;
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error checking if appointment exists", e);
-            throw new DAOException("Error checking if appointment exists: " + e.getMessage(), e);
+            logger.log(Level.SEVERE, AppointmentDaoMySqlConstants.ERROR_CHECKING_IF_APPOINTMENT_EXISTS, e);
+            throw new DAOException(AppointmentDaoMySqlConstants.ERROR_CHECKING_IF_APPOINTMENT_EXISTS + e.getMessage(), e);
         }
     }
 
@@ -405,8 +406,8 @@ public class AppointmentDaoMySql implements AppointmentDao {
             return 1; // If no appointments exist yet or if MAX(id) returned null
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error getting next appointment ID", e);
-            throw new DAOException("Error getting next appointment ID: " + e.getMessage(), e);
+            logger.log(Level.SEVERE, AppointmentDaoMySqlConstants.ERROR_GETTING_NEXT_APPOINTMENT, e);
+            throw new DAOException(AppointmentDaoMySqlConstants.ERROR_GETTING_NEXT_APPOINTMENT + e.getMessage(), e);
         }
     }
 
@@ -418,11 +419,11 @@ public class AppointmentDaoMySql implements AppointmentDao {
      * @throws SQLException If there is an error reading from the ResultSet
      */
     private Appointment extractAppointmentFromResultSet(ResultSet rs) throws SQLException {
-        int id = rs.getInt("id");
-        LocalDate date = rs.getDate("date").toLocalDate();
-        LocalTime time = rs.getTime("time").toLocalTime();
-        String description = rs.getString("description");
-        boolean notified = rs.getBoolean("notified");
+        int id = rs.getInt(AppointmentDaoMySqlConstants.COLUMN_ID);
+        LocalDate date = rs.getDate(AppointmentDaoMySqlConstants.COLUMN_DATE).toLocalDate();
+        LocalTime time = rs.getTime(AppointmentDaoMySqlConstants.COLUMN_TIME).toLocalTime();
+        String description = rs.getString(AppointmentDaoMySqlConstants.COLUMN_DESCRIPTION);
+        boolean notified = rs.getBoolean(AppointmentDaoMySqlConstants.COLUMN_NOTIFIED);
 
         return new Appointment(id, date, time, description, notified);
     }

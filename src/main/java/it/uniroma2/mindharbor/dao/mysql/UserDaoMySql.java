@@ -16,7 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * MySQL implementation of the {@link UserDao} interface.
+ * MySQL's implementation of the {@link UserDao} interface.
  * <p>
  * This class provides MySQL-specific implementations for user-related data
  * access operations, such as validating a user, saving user information,
