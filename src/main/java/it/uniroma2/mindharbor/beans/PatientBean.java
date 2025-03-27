@@ -53,11 +53,14 @@ public class PatientBean extends UserBean {
 
         /**
          * Builds and returns an instance of {@code PatientBean}.
+         * Validates that all required fields have valid values.
          *
          * @return A new {@code PatientBean} instance with the set properties.
+         * @throws IllegalArgumentException if any validation fails
          */
         @Override
         public PatientBean build() {
+            validate();
             return new PatientBean(this);
         }
 
@@ -69,6 +72,24 @@ public class PatientBean extends UserBean {
         @Override
         protected Builder self() {
             return this;
+        }
+
+        /**
+         * Validates all patient fields to ensure they contain valid data.
+         *
+         * @throws IllegalArgumentException if any validation fails
+         */
+        @Override
+        protected void validate() {
+            super.validate();
+
+            if (birthDate == null) {
+                throw new IllegalArgumentException("Birth date cannot be null");
+            }
+
+            if (birthDate.isAfter(LocalDate.now())) {
+                throw new IllegalArgumentException("Birth date cannot be in the future");
+            }
         }
     }
 

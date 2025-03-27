@@ -91,11 +91,29 @@ public class CredentialsBean {
 
         /**
          * Builds and returns an instance of {@code CredentialsBean}.
+         * Validates that all required fields are provided.
          *
          * @return A new {@code CredentialsBean} instance with the set properties.
+         * @throws IllegalArgumentException if any required field is missing or invalid.
          */
         public CredentialsBean build() {
+            validate();
             return new CredentialsBean(this);
+        }
+
+        /**
+         * Validates all credential fields to ensure they contain valid data.
+         *
+         * @throws IllegalArgumentException if any validation fails
+         */
+        protected void validate() {
+            if (username == null || username.trim().isEmpty()) {
+                throw new IllegalArgumentException("Username cannot be null or empty");
+            }
+
+            if (password == null || password.trim().isEmpty()) {
+                throw new IllegalArgumentException("Password cannot be null or empty");
+            }
         }
     }
 

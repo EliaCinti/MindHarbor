@@ -93,11 +93,35 @@ public class UserBean extends CredentialsBean {
 
         /**
          * Builds and returns an instance of {@code UserBean}.
+         * Validates that all required fields are provided and contain valid data.
          *
          * @return A new {@code UserBean} instance with the set properties.
+         * @throws IllegalArgumentException if any required field is missing or invalid.
          */
         public UserBean build() {
+            validate();
             return new UserBean(this);
+        }
+
+        /**
+         * Validates all user fields to ensure they contain valid data.
+         *
+         * @throws IllegalArgumentException if any validation fails
+         */
+        protected void validate() {
+            super.validate();
+
+            if (name == null || name.trim().isEmpty()) {
+                throw new IllegalArgumentException("First name cannot be null or empty");
+            }
+
+            if (surname == null || surname.trim().isEmpty()) {
+                throw new IllegalArgumentException("Last name cannot be null or empty");
+            }
+
+            if (gender == null || gender.trim().isEmpty()) {
+                throw new IllegalArgumentException("Gender cannot be null or empty");
+            }
         }
     }
 

@@ -6,6 +6,7 @@ import it.uniroma2.mindharbor.dao.ConnectionPoolManager;
 import it.uniroma2.mindharbor.dao.PatientDao;
 import it.uniroma2.mindharbor.dao.PsychologistDao;
 import it.uniroma2.mindharbor.dao.UserDao;
+import it.uniroma2.mindharbor.dao.mysql.constants.PsychologistDaoMySqlConstants;
 import it.uniroma2.mindharbor.dao.mysql.constants.PsychologistDaoMySqlQueries;
 import it.uniroma2.mindharbor.exception.DAOException;
 import it.uniroma2.mindharbor.model.Patient;
@@ -17,11 +18,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- * MySQL implementation of the {@link PsychologistDao} interface.
+ * MySQL's implementation of the {@link PsychologistDao} interface.
  * <p>
  * This class provides operations to manage psychologists in a MySQL database, including saving,
  * retrieving, updating, and deleting psychologist records.
@@ -30,8 +29,6 @@ import java.util.logging.Logger;
  * </p>
  */
 public class PsychologistDaoMySql implements PsychologistDao {
-
-    private static final Logger logger = Logger.getLogger(PsychologistDaoMySql.class.getName());
 
     /**
      * Saves a new psychologist in the database.
@@ -48,7 +45,7 @@ public class PsychologistDaoMySql implements PsychologistDao {
         UserDao userDao = DaoFactoryFacade.getInstance().getUserDao();
         userDao.saveUser(psychologist);
 
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(PsychologistDaoMySqlQueries.INSERT_PSYCHOLOGIST)) {
 
             stmt.setString(1, psychologist.getUsername());
@@ -57,12 +54,11 @@ public class PsychologistDaoMySql implements PsychologistDao {
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected == 0) {
-                throw new DAOException("Failed to save psychologist, no rows affected.");
+                throw new DAOException(PsychologistDaoMySqlConstants.FAILED_TO_SAVE_PSYCHOLOGIST);
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error saving psychologist", e);
-            throw new DAOException("Error saving psychologist: " + e.getMessage(), e);
+            throw new DAOException(PsychologistDaoMySqlConstants.ERROR_SAVING_PSYCHOLOGIST + e.getMessage(), e);
         }
     }
 
@@ -78,7 +74,7 @@ public class PsychologistDaoMySql implements PsychologistDao {
      */
     @Override
     public Psychologist retrievePsychologist(String username) throws DAOException {
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(PsychologistDaoMySqlQueries.SELECT_PSYCHOLOGIST_BY_USERNAME)) {
 
             stmt.setString(1, username);
@@ -92,8 +88,7 @@ public class PsychologistDaoMySql implements PsychologistDao {
             return null; // Psychologist not found
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error retrieving psychologist", e);
-            throw new DAOException("Error retrieving psychologist: " + e.getMessage(), e);
+            throw new DAOException(PsychologistDaoMySqlConstants.ERROR_RETRIEVING_PSYCHOLOGIST + e.getMessage(), e);
         }
     }
 
@@ -113,7 +108,7 @@ public class PsychologistDaoMySql implements PsychologistDao {
         UserDao userDao = DaoFactoryFacade.getInstance().getUserDao();
         userDao.updateUser(bean);
 
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(PsychologistDaoMySqlQueries.UPDATE_PSYCHOLOGIST)) {
 
             stmt.setString(1, psychologist.getOffice());
@@ -122,12 +117,11 @@ public class PsychologistDaoMySql implements PsychologistDao {
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected == 0) {
-                throw new DAOException("Psychologist not found: " + psychologist.getUsername());
+                throw new DAOException(PsychologistDaoMySqlConstants.PSYCHOLOGIST_NOT_FOUND + psychologist.getUsername());
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error updating psychologist", e);
-            throw new DAOException("Error updating psychologist: " + e.getMessage(), e);
+            throw new DAOException(PsychologistDaoMySqlConstants.ERROR_UPDATING_PSYCHOLOGIST + e.getMessage(), e);
         }
     }
 
@@ -142,14 +136,14 @@ public class PsychologistDaoMySql implements PsychologistDao {
      */
     @Override
     public void deletePsychologist(String username) throws DAOException {
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(PsychologistDaoMySqlQueries.DELETE_PSYCHOLOGIST)) {
 
             stmt.setString(1, username);
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected == 0) {
-                throw new DAOException("Psychologist not found: " + username);
+                throw new DAOException(PsychologistDaoMySqlConstants.PSYCHOLOGIST_NOT_FOUND + username);
             }
 
             // Delete the associated user record
@@ -157,8 +151,7 @@ public class PsychologistDaoMySql implements PsychologistDao {
             userDao.deleteUser(username);
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error deleting psychologist", e);
-            throw new DAOException("Error deleting psychologist: " + e.getMessage(), e);
+            throw new DAOException(PsychologistDaoMySqlConstants.ERROR_DELETING_PSYCHOLOGIST + e.getMessage(), e);
         }
     }
 
@@ -174,9 +167,15 @@ public class PsychologistDaoMySql implements PsychologistDao {
      */
     @Override
     public List<Patient> getPatients(Psychologist psychologist) throws DAOException {
-        PatientDao patientDao = DaoFactoryFacade.getInstance().getPatientDao();
-        return patientDao.retrievePatientsByPsychologist(psychologist);
+        try {
+            PatientDao patientDao = DaoFactoryFacade.getInstance().getPatientDao();
+            return patientDao.retrievePatientsByPsychologist(psychologist);
+        } catch (DAOException e) {
+            throw new DAOException(PsychologistDaoMySqlConstants.ERROR_RETRIEVING_PATIENTS + e.getMessage(), e);
+        }
     }
+
+    // ----------------------- Helper methods -----------------------
 
     /**
      * Extracts psychologist data from a ResultSet row.
@@ -186,13 +185,23 @@ public class PsychologistDaoMySql implements PsychologistDao {
      * @throws SQLException If there is an error reading from the ResultSet
      */
     private Psychologist extractPsychologistFromResultSet(ResultSet rs) throws SQLException {
-        String username = rs.getString("Username");
-        String firstName = rs.getString("Firstname");
-        String lastName = rs.getString("Lastname");
-        String gender = rs.getString("Gender");
-        String office = rs.getString("Office");
-        String hourlyCost = String.valueOf(rs.getDouble("HourlyCost"));
+        String username = rs.getString(PsychologistDaoMySqlConstants.COLUMN_USERNAME);
+        String firstName = rs.getString(PsychologistDaoMySqlConstants.COLUMN_FIRSTNAME);
+        String lastName = rs.getString(PsychologistDaoMySqlConstants.COLUMN_LASTNAME);
+        String gender = rs.getString(PsychologistDaoMySqlConstants.COLUMN_GENDER);
+        String office = rs.getString(PsychologistDaoMySqlConstants.COLUMN_OFFICE);
+        String hourlyCost = String.valueOf(rs.getDouble(PsychologistDaoMySqlConstants.COLUMN_HOURLY_COST));
 
         return new Psychologist(username, firstName, lastName, gender, office, hourlyCost);
+    }
+
+    /**
+     * Gets a connection from the connection pool.
+     *
+     * @return A database connection
+     * @throws SQLException If there is an error obtaining a connection
+     */
+    private Connection getConnection() throws SQLException {
+        return ConnectionPoolManager.getInstance().getConnection();
     }
 }

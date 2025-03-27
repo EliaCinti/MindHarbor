@@ -77,12 +77,33 @@ public class PsychologistBean extends UserBean {
 
         /**
          * Builds and returns an instance of {@code PsychologistBean}.
+         * Validates that all required fields have valid values.
          *
          * @return A new {@code PsychologistBean} instance with the set properties.
+         * @throws IllegalArgumentException if any validation fails
          */
         @Override
         public PsychologistBean build() {
+            validate();
             return new PsychologistBean(this);
+        }
+
+        /**
+         * Validates all psychologist fields to ensure they contain valid data.
+         *
+         * @throws IllegalArgumentException if any validation fails
+         */
+        @Override
+        protected void validate() {
+            super.validate();
+
+            if (office == null || office.trim().isEmpty()) {
+                throw new IllegalArgumentException("Office cannot be null or empty");
+            }
+
+            if (hourlyCost <= 0) {
+                throw new IllegalArgumentException("Hourly cost must be greater than zero");
+            }
         }
     }
 
