@@ -1,10 +1,13 @@
 package it.uniroma2.mindharbor.app_controller;
 
+import it.uniroma2.mindharbor.dao.AppointmentDao;
 import it.uniroma2.mindharbor.dao.PatientDao;
 import it.uniroma2.mindharbor.exception.DAOException;
+import it.uniroma2.mindharbor.model.Appointment;
 import it.uniroma2.mindharbor.model.Patient;
 import it.uniroma2.mindharbor.patterns.facade.DaoFactoryFacade;
 import it.uniroma2.mindharbor.session.SessionManager;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,6 +48,35 @@ public class HomePatientController {
     }
 
     /**
+     * Checks if there are appointments appena accettati that require notification.
+     *
+     * @return true if there are appointments not yet notified, false otherwise.
+     */
+    public boolean hasUnnotifiedAppointments() {
+        Patient patient = getCurrentPatient();
+        if (patient != null && patient.getAppointmentList() != null) {
+            return patient.getAppointmentList().stream()
+                    .anyMatch(appointment -> !appointment.isNotified());
+        }
+        return false;
+    }
+
+    /**
+     * Counts how many unnotified appointments the current patient has.
+     *
+     * @return the number of unnotified appointments.
+     */
+    public int getUnnotifiedAppointmentsCount() {
+        Patient patient = getCurrentPatient();
+        if (patient != null && patient.getAppointmentList() != null) {
+            return (int) patient.getAppointmentList().stream()
+                    .filter(appointment -> !appointment.isNotified())
+                    .count();
+        }
+        return 0;
+    }
+
+    /**
      * Gets the number of appointments for the current patient.
      *
      * @return The number of appointments or 0 if there are none.
@@ -55,6 +87,35 @@ public class HomePatientController {
             return patient.getAppointmentList().size();
         }
         return 0;
+    }
+
+    /**
+     * Marks all appointments as notified.
+     * This method should be called when the user views
+     * the appointment list, indicating they've seen the notifications.
+     *
+     * @return true if the operation was successful, false otherwise.
+     */
+    public boolean markAllAppointmentsAsNotified() {
+        Patient patient = getCurrentPatient();
+        if (patient != null && patient.getAppointmentList() != null) {
+            // Mark all appointments as notified in memory
+            patient.getAppointmentList().forEach(Appointment::markAsNotified);
+
+            // Update also persistence
+            try {
+                DaoFactoryFacade daoFactoryFacade = DaoFactoryFacade.getInstance();
+                AppointmentDao appointmentDao = daoFactoryFacade.getAppointmentDao();
+
+                // Update notification status in database
+                appointmentDao.updateAppointmentsNotificationStatus(patient.getAppointmentList());
+                return true;
+            } catch (DAOException e) {
+                logger.log(Level.SEVERE, "Error updating notification statuses", e);
+                return false;
+            }
+        }
+        return false;
     }
 
     /**

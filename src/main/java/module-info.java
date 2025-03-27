@@ -1,9 +1,10 @@
 module it.uniroma2.mindharbor {
     requires javafx.controls;
     requires javafx.fxml;
-    requires java.sql;
     requires com.opencsv;
     requires jbcrypt;
+    requires com.zaxxer.hikari;
+    requires java.sql;
 
 
     opens it.uniroma2.mindharbor to javafx.fxml;

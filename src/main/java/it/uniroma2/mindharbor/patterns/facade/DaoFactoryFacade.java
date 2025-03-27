@@ -1,8 +1,10 @@
 package it.uniroma2.mindharbor.patterns.facade;
 
+import it.uniroma2.mindharbor.dao.AppointmentDao;
 import it.uniroma2.mindharbor.dao.PatientDao;
 import it.uniroma2.mindharbor.dao.PsychologistDao;
 import it.uniroma2.mindharbor.dao.UserDao;
+import it.uniroma2.mindharbor.patterns.factory.AppointmentDaoFactory;
 import it.uniroma2.mindharbor.patterns.factory.PatientDaoFactory;
 import it.uniroma2.mindharbor.patterns.factory.PsychologistDaoFactory;
 import it.uniroma2.mindharbor.patterns.factory.UserDaoFactory;
@@ -23,6 +25,7 @@ public class DaoFactoryFacade {
     private UserDao userDao;
     private PatientDao patientDao;
     private PsychologistDao psychologistDao;
+    private AppointmentDao appointmentDao;
 
     /**
      * Private constructor to prevent external instantiation, enforcing the singleton pattern.
@@ -35,7 +38,7 @@ public class DaoFactoryFacade {
     /**
      * Provides global access to the single instance of the {@code DaoFactoryFacade},
      * creating it if it does not yet exist. This method is thread-safe to prevent
-     * multiple instantiation in a multi-threaded environment.
+     * multiple instantiation in a multithreaded environment.
      *
      * @return The singleton instance of {@code DaoFactoryFacade}.
      */
@@ -97,5 +100,19 @@ public class DaoFactoryFacade {
             psychologistDao = psychologistDaoFactory.getPsychologistDao(persistenceType);
         }
         return psychologistDao;
+    }
+
+    /**
+     * Retrieves a singleton instance of {@link AppointmentDao}, creating it through {@link AppointmentDaoFactory}
+     * if not previously instantiated. Ensures the DAO is aligned with the current persistence strategy.
+     *
+     * @return The singleton {@link AppointmentDao} instance.
+     */
+    public AppointmentDao getAppointmentDao() {
+        if (appointmentDao == null) {
+            AppointmentDaoFactory appointmentDaoFactory = new AppointmentDaoFactory();
+            appointmentDao = appointmentDaoFactory.getAppointmentDao(persistenceType);
+        }
+        return appointmentDao;
     }
 }
