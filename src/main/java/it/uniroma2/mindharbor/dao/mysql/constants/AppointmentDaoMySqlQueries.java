@@ -52,7 +52,7 @@ public class AppointmentDaoMySqlQueries {
             "SELECT * FROM Appointments WHERE date = ? ORDER BY time";
 
     /**
-     * SQL query to select all unnotified appointments for a specific patient.
+     * SQL query to select all unnoticed appointments for a specific patient.
      */
     public static final String SELECT_UNNOTIFIED_APPOINTMENTS =
             "SELECT * FROM Appointments WHERE patient_username = ? AND notified = false ORDER BY date, time";

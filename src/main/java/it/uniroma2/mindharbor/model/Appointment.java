@@ -15,13 +15,17 @@ public class Appointment {
 
     /**
      * Constructs an Appointment with the given parameters.
+     * Validates that all required fields are valid.
      *
      * @param id          The unique identifier of the appointment.
      * @param date        The date of the appointment.
      * @param time        The time of the appointment.
      * @param description A brief description of the appointment.
+     * @param notified    Whether the appointment has been notified to the patient.
+     * @throws IllegalArgumentException if any validation fails.
      */
     public Appointment(int id, LocalDate date, LocalTime time, String description, boolean notified) {
+        validateAppointment(id, date, time, description);
         this.id = id;
         this.date = date;
         this.time = time;
@@ -43,9 +47,37 @@ public class Appointment {
      * @param time        The time of the appointment.
      * @param description A brief description of the appointment.
      * @see #Appointment(int, LocalDate, LocalTime, String, boolean) The full constructor
+     * @throws IllegalArgumentException if any validation fails.
      */
     public Appointment(int id, LocalDate date, LocalTime time, String description) {
         this(id, date, time, description, false);
+    }
+
+    /**
+     * Validates that all fields of the appointment contain valid data.
+     *
+     * @param id          The appointment ID to validate
+     * @param date        The appointment date to validate
+     * @param time        The appointment time to validate
+     * @param description The appointment description to validate
+     * @throws IllegalArgumentException if any validation fails
+     */
+    private void validateAppointment(int id, LocalDate date, LocalTime time, String description) {
+        if (id < 0) {
+            throw new IllegalArgumentException("Appointment ID cannot be negative");
+        }
+
+        if (date == null) {
+            throw new IllegalArgumentException("Appointment date cannot be null");
+        }
+
+        if (time == null) {
+            throw new IllegalArgumentException("Appointment time cannot be null");
+        }
+
+        if (description == null) {
+            throw new IllegalArgumentException("Appointment description cannot be null");
+        }
     }
 
     /**
