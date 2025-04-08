@@ -2,7 +2,7 @@ package it.uniroma2.mindharbor.dao.mysql;
 
 import it.uniroma2.mindharbor.beans.PsychologistBean;
 import it.uniroma2.mindharbor.beans.UserBean;
-import it.uniroma2.mindharbor.dao.ConnectionPoolManager;
+import it.uniroma2.mindharbor.dao.ConnectionFactory;
 import it.uniroma2.mindharbor.dao.PatientDao;
 import it.uniroma2.mindharbor.dao.PsychologistDao;
 import it.uniroma2.mindharbor.dao.UserDao;
@@ -25,13 +25,27 @@ import java.util.logging.Logger;
  * <p>
  * This class provides operations to manage psychologists in a MySQL database, including saving,
  * retrieving, updating, and deleting psychologist records.
- * It uses a connection pool for
- * database operations to improve performance and reliability.
+ * It uses ConnectionFactory to obtain database connections.
  * </p>
  */
 public class PsychologistDaoMySql implements PsychologistDao {
 
     private static final Logger logger = Logger.getLogger(PsychologistDaoMySql.class.getName());
+
+    /**
+     * Gets a connection from the connection factory.
+     *
+     * @return A database connection
+     * @throws DAOException If there is an error obtaining a connection
+     */
+    private Connection getConnection() throws DAOException {
+        try {
+            return ConnectionFactory.getConnection();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to get database connection", e);
+            throw new DAOException("Error obtaining database connection: " + e.getMessage(), e);
+        }
+    }
 
     /**
      * Saves a new psychologist in the database.
@@ -48,7 +62,7 @@ public class PsychologistDaoMySql implements PsychologistDao {
         UserDao userDao = DaoFactoryFacade.getInstance().getUserDao();
         userDao.saveUser(psychologist);
 
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(PsychologistDaoMySqlQueries.INSERT_PSYCHOLOGIST)) {
 
             stmt.setString(1, psychologist.getUsername());
@@ -78,7 +92,7 @@ public class PsychologistDaoMySql implements PsychologistDao {
      */
     @Override
     public Psychologist retrievePsychologist(String username) throws DAOException {
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(PsychologistDaoMySqlQueries.SELECT_PSYCHOLOGIST_BY_USERNAME)) {
 
             stmt.setString(1, username);
@@ -113,7 +127,7 @@ public class PsychologistDaoMySql implements PsychologistDao {
         UserDao userDao = DaoFactoryFacade.getInstance().getUserDao();
         userDao.updateUser(bean);
 
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(PsychologistDaoMySqlQueries.UPDATE_PSYCHOLOGIST)) {
 
             stmt.setString(1, psychologist.getOffice());
@@ -142,7 +156,7 @@ public class PsychologistDaoMySql implements PsychologistDao {
      */
     @Override
     public void deletePsychologist(String username) throws DAOException {
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(PsychologistDaoMySqlQueries.DELETE_PSYCHOLOGIST)) {
 
             stmt.setString(1, username);

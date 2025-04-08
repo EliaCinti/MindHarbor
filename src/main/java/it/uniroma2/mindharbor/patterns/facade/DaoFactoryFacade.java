@@ -34,7 +34,6 @@ public class DaoFactoryFacade {
         /* Empty constructor */
     }
 
-
     /**
      * Provides global access to the single instance of the {@code DaoFactoryFacade},
      * creating it if it does not yet exist. This method is thread-safe to prevent
@@ -47,6 +46,15 @@ public class DaoFactoryFacade {
             instance = new DaoFactoryFacade();
         }
         return instance;
+    }
+
+    /**
+     *
+     * Gets the current persistence type being used.
+     * @return The current persistence type (MYSQL or CSV).
+     */
+    public PersistenceType getPersistenceType() {
+        return persistenceType;
     }
 
     /**

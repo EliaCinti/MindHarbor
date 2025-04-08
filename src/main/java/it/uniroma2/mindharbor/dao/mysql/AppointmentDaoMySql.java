@@ -1,7 +1,7 @@
 package it.uniroma2.mindharbor.dao.mysql;
 
 import it.uniroma2.mindharbor.dao.AppointmentDao;
-import it.uniroma2.mindharbor.dao.ConnectionPoolManager;
+import it.uniroma2.mindharbor.dao.ConnectionFactory;
 import it.uniroma2.mindharbor.dao.mysql.constants.AppointmentDaoMySqlQueries;
 import it.uniroma2.mindharbor.exception.DAOException;
 import it.uniroma2.mindharbor.model.Appointment;
@@ -28,13 +28,27 @@ import java.util.logging.Logger;
  * centralized in {@link AppointmentDaoMySqlQueries} for better maintainability.
  * </p>
  * <p>
- * This implementation uses connection pooling through {@link ConnectionPoolManager}
- * to improve performance while maintaining robustness.
+ * This implementation uses ConnectionFactory to obtain database connections.
  * </p>
  */
 public class AppointmentDaoMySql implements AppointmentDao {
 
     private static final Logger logger = Logger.getLogger(AppointmentDaoMySql.class.getName());
+
+    /**
+     * Gets a connection from the connection factory.
+     *
+     * @return A database connection
+     * @throws DAOException If there is an error obtaining a connection
+     */
+    private Connection getConnection() throws DAOException {
+        try {
+            return ConnectionFactory.getConnection();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to get database connection", e);
+            throw new DAOException("Error obtaining database connection: " + e.getMessage(), e);
+        }
+    }
 
     /**
      * Saves a new appointment in the database.
@@ -45,7 +59,7 @@ public class AppointmentDaoMySql implements AppointmentDao {
      */
     @Override
     public void saveAppointment(Appointment appointment, String patientUsername) throws DAOException {
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(AppointmentDaoMySqlQueries.INSERT_APPOINTMENT)) {
 
             stmt.setInt(1, appointment.getId());
@@ -75,7 +89,7 @@ public class AppointmentDaoMySql implements AppointmentDao {
      */
     @Override
     public Appointment retrieveAppointment(int appointmentId) throws DAOException {
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(AppointmentDaoMySqlQueries.SELECT_APPOINTMENT_BY_ID)) {
 
             stmt.setInt(1, appointmentId);
@@ -105,7 +119,7 @@ public class AppointmentDaoMySql implements AppointmentDao {
     public List<Appointment> retrieveAppointmentsByPatient(String patientUsername) throws DAOException {
         List<Appointment> appointments = new ArrayList<>();
 
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(AppointmentDaoMySqlQueries.SELECT_APPOINTMENTS_BY_PATIENT)) {
 
             stmt.setString(1, patientUsername);
@@ -135,7 +149,7 @@ public class AppointmentDaoMySql implements AppointmentDao {
     public List<Appointment> retrieveAppointmentsByPsychologist(String psychologistUsername) throws DAOException {
         List<Appointment> appointments = new ArrayList<>();
 
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(AppointmentDaoMySqlQueries.SELECT_APPOINTMENTS_BY_PSYCHOLOGIST)) {
 
             stmt.setString(1, psychologistUsername);
@@ -165,7 +179,7 @@ public class AppointmentDaoMySql implements AppointmentDao {
     public List<Appointment> retrieveAppointmentsByDate(LocalDate date) throws DAOException {
         List<Appointment> appointments = new ArrayList<>();
 
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(AppointmentDaoMySqlQueries.SELECT_APPOINTMENTS_BY_DATE)) {
 
             stmt.setDate(1, Date.valueOf(date));
@@ -188,14 +202,14 @@ public class AppointmentDaoMySql implements AppointmentDao {
      * Retrieves all appointments that have not been notified to the patient yet.
      *
      * @param patientUsername The username of the patient
-     * @return A list of unnotified appointments, empty list if none found
+     * @return A list of unnoticed appointments, empty list if none found
      * @throws DAOException If there is an error executing the SQL query
      */
     @Override
     public List<Appointment> retrieveUnnotifiedAppointments(String patientUsername) throws DAOException {
         List<Appointment> appointments = new ArrayList<>();
 
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(AppointmentDaoMySqlQueries.SELECT_UNNOTIFIED_APPOINTMENTS)) {
 
             stmt.setString(1, patientUsername);
@@ -207,8 +221,8 @@ public class AppointmentDaoMySql implements AppointmentDao {
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error retrieving unnotified appointments", e);
-            throw new DAOException("Error retrieving unnotified appointments: " + e.getMessage(), e);
+            logger.log(Level.SEVERE, "Error retrieving unnoticed appointments", e);
+            throw new DAOException("Error retrieving unnoticed appointments: " + e.getMessage(), e);
         }
 
         return appointments;
@@ -222,7 +236,7 @@ public class AppointmentDaoMySql implements AppointmentDao {
      */
     @Override
     public void updateAppointment(Appointment appointment) throws DAOException {
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(AppointmentDaoMySqlQueries.UPDATE_APPOINTMENT)) {
 
             stmt.setDate(1, Date.valueOf(appointment.getDate()));
@@ -251,7 +265,7 @@ public class AppointmentDaoMySql implements AppointmentDao {
      */
     @Override
     public void updateAppointmentNotificationStatus(int appointmentId, boolean notified) throws DAOException {
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(AppointmentDaoMySqlQueries.UPDATE_APPOINTMENT_NOTIFICATION)) {
 
             stmt.setBoolean(1, notified);
@@ -282,7 +296,7 @@ public class AppointmentDaoMySql implements AppointmentDao {
         }
 
         // Use try-with-resources to ensure the connection is properly closed/returned to the pool
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection()) {
+        try (Connection connection = getConnection()) {
             try {
                 // Begin transaction
                 connection.setAutoCommit(false);
@@ -340,7 +354,7 @@ public class AppointmentDaoMySql implements AppointmentDao {
      */
     @Override
     public void deleteAppointment(int appointmentId) throws DAOException {
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(AppointmentDaoMySqlQueries.DELETE_APPOINTMENT)) {
 
             stmt.setInt(1, appointmentId);
@@ -365,7 +379,7 @@ public class AppointmentDaoMySql implements AppointmentDao {
      */
     @Override
     public boolean appointmentExists(int appointmentId) throws DAOException {
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(AppointmentDaoMySqlQueries.CHECK_APPOINTMENT_EXISTS)) {
 
             stmt.setInt(1, appointmentId);
@@ -393,7 +407,7 @@ public class AppointmentDaoMySql implements AppointmentDao {
      */
     @Override
     public int getNextAppointmentId() throws DAOException {
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(AppointmentDaoMySqlQueries.GET_MAX_APPOINTMENT_ID)) {
 

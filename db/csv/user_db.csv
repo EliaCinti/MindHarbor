@@ -1,3 +1,4 @@
 Username,Password,Firstname,Lastname,Type,Gender
 "eliacinti","$2a$12$YXXLlBYC/3NhjWc/Qg1aOu1S.TLj7OVi7zVRQOKgmTAWBNEjZidFe","Elia","Cinti","PATIENT","Male"
 "ciruzzo","$2a$12$iAVRezc/ewoCzaQvmwvssuXjtDUR2QlWjShHZK6Zzg/K6n8J3wYy.","Ciro","Cataldo","PATIENT","Male"
+"mariotto","$2a$12$YPR1bt7z1v6zHEJIXSsMiuuK2j7KUn2hUXTovaoM32swhzo91OPrK","Mario","Rossi","PATIENT","Male"

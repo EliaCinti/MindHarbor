@@ -2,7 +2,7 @@ package it.uniroma2.mindharbor.dao.mysql;
 
 import it.uniroma2.mindharbor.beans.CredentialsBean;
 import it.uniroma2.mindharbor.beans.UserBean;
-import it.uniroma2.mindharbor.dao.ConnectionPoolManager;
+import it.uniroma2.mindharbor.dao.ConnectionFactory;
 import it.uniroma2.mindharbor.dao.UserDao;
 import it.uniroma2.mindharbor.dao.mysql.constants.UserDaoMySqlQueries;
 import it.uniroma2.mindharbor.exception.DAOException;
@@ -23,13 +23,27 @@ import java.util.logging.Logger;
  * retrieving user details, updating user data, and deleting users.
  * </p>
  * <p>
- * This implementation uses connection pooling through {@link ConnectionPoolManager}
- * to improve performance while maintaining robustness.
+ * This implementation uses ConnectionFactory to obtain database connections.
  * </p>
  */
 public class UserDaoMySql implements UserDao {
 
     private static final Logger logger = Logger.getLogger(UserDaoMySql.class.getName());
+
+    /**
+     * Gets a connection from the connection factory.
+     *
+     * @return A database connection
+     * @throws DAOException If there is an error obtaining a connection
+     */
+    private Connection getConnection() throws DAOException {
+        try {
+            return ConnectionFactory.getConnection();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to get database connection", e);
+            throw new DAOException("Error obtaining database connection: " + e.getMessage(), e);
+        }
+    }
 
     /**
      * Validates a user by checking if the provided username and password match
@@ -45,7 +59,7 @@ public class UserDaoMySql implements UserDao {
      */
     @Override
     public void validateUser(CredentialsBean credentials) throws DAOException {
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.VALIDATE_USER)) {
 
             stmt.setString(1, credentials.getUsername());
@@ -88,7 +102,7 @@ public class UserDaoMySql implements UserDao {
             throw new DAOException("Username already exists: " + user.getUsername());
         }
 
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.INSERT_USER)) {
 
             // Hash the password before storing
@@ -126,7 +140,7 @@ public class UserDaoMySql implements UserDao {
      */
     @Override
     public String[] retrieveUser(String username) throws DAOException {
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.SELECT_USER_BY_USERNAME)) {
 
             stmt.setString(1, username);
@@ -161,7 +175,7 @@ public class UserDaoMySql implements UserDao {
      */
     @Override
     public boolean isUsernameTaken(String username) throws DAOException {
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.CHECK_USERNAME_EXISTS)) {
 
             stmt.setString(1, username);
@@ -192,7 +206,7 @@ public class UserDaoMySql implements UserDao {
      */
     @Override
     public void updateUser(UserBean user) throws DAOException {
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.UPDATE_USER)) {
 
             // Check if the original password has changed and needs to be hashed
@@ -239,7 +253,7 @@ public class UserDaoMySql implements UserDao {
      */
     @Override
     public void deleteUser(String username) throws DAOException {
-        try (Connection connection = ConnectionPoolManager.getInstance().getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.DELETE_USER)) {
 
             stmt.setString(1, username);
