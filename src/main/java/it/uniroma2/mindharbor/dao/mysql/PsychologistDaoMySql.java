@@ -18,6 +18,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * MySQL's implementation of the {@link PsychologistDao} interface.
@@ -28,6 +30,7 @@ import java.util.List;
  * </p>
  */
 public class PsychologistDaoMySql implements PsychologistDao {
+    private static final Logger logger = Logger.getLogger(PsychologistDaoMySql.class.getName());
 
     /**
      * Gets a connection from the connection factory.
@@ -209,13 +212,4 @@ public class PsychologistDaoMySql implements PsychologistDao {
         return new Psychologist(username, firstName, lastName, gender, office, hourlyCost);
     }
 
-    /**
-     * Gets a connection from the connection pool.
-     *
-     * @return A database connection
-     * @throws SQLException If there is an error obtaining a connection
-     */
-    private Connection getConnection() throws SQLException {
-        return ConnectionPoolManager.getInstance().getConnection();
-    }
 }

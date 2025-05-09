@@ -13,6 +13,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * MySQL's implementation of the {@link UserDao} interface.
@@ -26,6 +28,8 @@ import java.sql.SQLException;
  * </p>
  */
 public class UserDaoMySql implements UserDao {
+
+    private static final Logger logger = Logger.getLogger(UserDaoMySql.class.getName());
 
     /**
      * Gets a connection from the connection factory.
@@ -260,13 +264,4 @@ public class UserDaoMySql implements UserDao {
         }
     }
 
-    /**
-     * Gets a connection from the connection pool.
-     *
-     * @return A database connection
-     * @throws SQLException If there is an error obtaining a connection
-     */
-    private Connection getConnection() throws SQLException {
-        return ConnectionPoolManager.getInstance().getConnection();
-    }
 }
