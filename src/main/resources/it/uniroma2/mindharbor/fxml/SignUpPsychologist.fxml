@@ -7,6 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/SignUp_style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.mindharbor.graphic_controller.SignUpPsychologistGraphicController">
@@ -15,17 +16,25 @@
     <ImageView fitHeight="419.0" fitWidth="728.0" layoutX="-65.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true">
         <Image url="@../Img/sondo.png" />
     </ImageView>
-    <TextField editable="false" layoutX="209.0" layoutY="177.0" prefHeight="26.0" prefWidth="149.0" styleClass="input-field" text="Psychologist" />
-    <TextField fx:id="officeTextField" layoutX="209.0" layoutY="211.0" prefHeight="26.0" prefWidth="170.0" promptText="Office" styleClass="input-field" />
-    <Button fx:id="signUpButton" alignment="CENTER" contentDisplay="CENTER" layoutX="248.0" layoutY="316.0" mnemonicParsing="false" onAction="#onSignUpClick" prefHeight="40.0" prefWidth="104.0" styleClass="access_button" text="SIGN UP" textAlignment="CENTER" />
-    <Label fx:id="msgLbl" alignment="CENTER" layoutX="96.0" layoutY="291.0" prefHeight="18.0" prefWidth="427.0" styleClass="msg-label" textFill="WHITE">
+
+    <!-- VBox per centrare gli elementi in modo uniforme -->
+    <VBox alignment="CENTER" layoutX="150.0" layoutY="175.0" prefWidth="300.0" spacing="15.0">
+        <!-- Modifica la larghezza dei TextField a 182px -->
+        <TextField editable="false" prefHeight="26.0" prefWidth="182.0" styleClass="input-field, psychologist-field" text="Psychologist" />
+        <TextField fx:id="officeTextField" prefHeight="26.0" prefWidth="182.0" promptText="Office" styleClass="input-field, psychologist-field" />
+        <TextField fx:id="hourlyCostTextField1" prefHeight="26.0" prefWidth="182.0" promptText="Hourly Cost" styleClass="input-field, psychologist-field" />
+        <Button fx:id="signUpButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onSignUpClick" prefHeight="40.0" prefWidth="104.0" styleClass="access_button" text="SIGN UP" />
+    </VBox>
+
+    <Label fx:id="msgLbl" alignment="CENTER" layoutX="96.0" layoutY="350.0" prefHeight="18.0" prefWidth="427.0" styleClass="msg-label" textFill="WHITE">
     </Label>
-   <Label alignment="CENTER" layoutX="113.0" layoutY="135.0" prefHeight="34.0" prefWidth="390.0" styleClass="title-text" text="MINDHARBOR" textAlignment="CENTER" textFill="WHITE">
-      <font>
-         <Font name="KoHo Light" size="25.0" />
-      </font>
-   </Label>
-   <TextField fx:id="hourlyCostTextField1" layoutX="209.0" layoutY="246.0" prefHeight="26.0" prefWidth="170.0" promptText="Hourly Cost" styleClass="input-field" />
+
+    <Label alignment="CENTER" layoutX="113.0" layoutY="135.0" prefHeight="34.0" prefWidth="390.0" styleClass="title-text" text="MINDHARBOR" textAlignment="CENTER" textFill="WHITE">
+        <font>
+            <Font name="KoHo Light" size="25.0" />
+        </font>
+    </Label>
+
     <Label fx:id="backButton" onMouseClicked="#onBackButtonClicked" styleClass="back-button">
         <graphic>
             <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="76.0" layoutY="187.0">

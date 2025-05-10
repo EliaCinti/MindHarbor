@@ -20,12 +20,12 @@
     <Button fx:id="signUpButton" alignment="CENTER" contentDisplay="CENTER" layoutX="248.0" layoutY="278.0" mnemonicParsing="false" onAction="#onSignUpClick" prefHeight="40.0" prefWidth="104.0" styleClass="access_button" text="SIGN UP" textAlignment="CENTER" />
     <Label fx:id="msgLbl" alignment="CENTER" layoutX="164.0" layoutY="256.0" prefHeight="18.0" prefWidth="272.0" styleClass="msg-label" textFill="WHITE">
     </Label>
-   <Label alignment="CENTER" layoutX="113.0" layoutY="135.0" prefHeight="34.0" prefWidth="390.0" styleClass="title-text" text="MINDHARBOR" textAlignment="CENTER" textFill="WHITE">
-      <font>
-         <Font name="KoHo Light" size="25.0" />
-      </font>
-   </Label>
-   <DatePicker fx:id="datePicker" layoutX="209.0" layoutY="211.0" prefHeight="26.0" prefWidth="182.0" promptText="dd / mm / yyyy" />
+    <Label alignment="CENTER" layoutX="113.0" layoutY="135.0" prefHeight="34.0" prefWidth="390.0" styleClass="title-text" text="MINDHARBOR" textAlignment="CENTER" textFill="WHITE">
+        <font>
+            <Font name="KoHo Light" size="25.0" />
+        </font>
+    </Label>
+    <DatePicker fx:id="datePicker" layoutX="209.0" layoutY="211.0" prefHeight="26.0" prefWidth="182.0" promptText="dd / mm / yyyy" styleClass="standard-field" />
     <Label fx:id="backButton" onMouseClicked="#onBackButtonClicked" styleClass="back-button">
         <graphic>
             <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="76.0" layoutY="187.0">
@@ -33,4 +33,5 @@
             </ImageView>
         </graphic>
     </Label>
+    <Label alignment="CENTER" layoutX="193.0" layoutY="325.0" prefHeight="18.0" prefWidth="214.0" text="Complete your patient profile" textFill="WHITE" />
 </AnchorPane>

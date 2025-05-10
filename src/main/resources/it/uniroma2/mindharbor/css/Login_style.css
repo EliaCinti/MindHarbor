@@ -1,91 +1,14 @@
-/* Stile base per il pulsante Accedi */
+/* Login_style.css */
+@import "base_style.css";
+
+/* Specific style for the login button */
 .access_button {
-    /* Proprietà utili per JavaFX */
     -fx-background-color: linear-gradient(to right, #4caf50, #66bb6a);
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-padding: 10px 20px;
-    -fx-border-radius: 20px;
-    -fx-background-radius: 20px;
-    -fx-cursor: hand;
-    -fx-transition: all 0.3s ease-in-out;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.4, 0, 2);
 }
 
-/* Stile hover (quando il mouse passa sopra il pulsante) */
-.access_button:hover {
-    -fx-background-color: linear-gradient(to right, #43a047, #66bb6a);
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0.5, 0, 3);
-}
-
-/* Stile per lo stato premuto (click del mouse) */
-.access_button:pressed {
-    -fx-background-color: #2e7d32;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0.5, 0, 2);
-    -fx-scale-x: 1.0;
-    -fx-scale-y: 1.0;
-}
-
-.input-field {
-    -fx-background-color: white;
-    -fx-border-color: #bdc3c7;
-    -fx-border-radius: 20px;
-    -fx-border: 1px;
-    -fx-background-radius: 20px;
-    -fx-pref-height: 30px;
-    -fx-pref-width: 182px;
-    -fx-padding: 0 15px;
-    -fx-font-size: 12px;
-    -fx-text-fill: #222;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.3, 0, 1);
-    -fx-transition: border-color 0.3s ease, border-width 0.3s ease;
-}
-
-/* Hover per entrambi */
-.input-field:hover {
-    -fx-border-color: #4caf50;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.4, 0, 1);
-    -fx-border-width: 2px;
-}
-
-/* Focus per entrambi */
-.input-field:focused {
-    -fx-border-color: #228B22;
-    -fx-background-color: #f9f9f9;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.4, 0, 1);
-}
-
-/* Stile per il titolo MINDHARBOR */
-.title-text {
-    -fx-font-family: "KoHo Light";
-    -fx-font-size: 26px;
-    -fx-text-fill: white;
-    -fx-letter-spacing: 10px;
-    -fx-font-weight: 200;
-    -fx-text-alignment: center;
-    -fx-translate-x: -10px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 3, 0.3, 0, 1);
-    -fx-text-fill: rgba(255, 255, 255, 0.8);
-}
-
-.msg-label {
-    -fx-translate-y: -5;
-    -fx-font-weight: bold;
-    -fx-font-family: "KoHo Light";
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
-}
-
+/* Sign in with text style */
 .sign-in-with {
     -fx-font-weight: bold;
     -fx-font-family: "KoHo Light";
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
-}
-
-.back-button {
-    -fx-translate-x: 55px;
-    -fx-translate-y: 170px;
-    -fx-background-color: transparent; /* Rende lo sfondo del bottone trasparente */
-    -fx-padding: 20;
 }

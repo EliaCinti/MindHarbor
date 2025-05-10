@@ -1,49 +1,173 @@
-/* Stile base per il pulsante SignUp */
+/* SignUp_style.css */
+@import "base_style.css";
+
+/* Specific style for the signup button */
 .access_button {
     -fx-background-color: linear-gradient(to right, #4caf50, #66bb6a);
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-padding: 10px 20px;
-    -fx-border-radius: 20px;
-    -fx-background-radius: 20px;
-    -fx-cursor: hand;
-    -fx-transition: all 0.3s ease-in-out;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.4, 0, 2);
 }
 
-/* Stile hover (quando il mouse passa sopra il pulsante) */
-.access_button:hover {
-    -fx-background-color: linear-gradient(to right, #43a047, #66bb6a);
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0.5, 0, 3);
-}
-
-/* Stile per lo stato premuto (click del mouse) */
-.access_button:pressed {
-    -fx-background-color: #2e7d32;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0.5, 0, 2);
-    -fx-scale-x: 1.0;
-    -fx-scale-y: 1.0;
-}
-
-/* Campi di input (TextField e PasswordField) */
-.input-field {
+/* ComboBox styles */
+.combo-box {
     -fx-background-color: white;
     -fx-border-color: #bdc3c7;
     -fx-border-radius: 20px;
-    -fx-border-width: 1px;
     -fx-background-radius: 20px;
     -fx-pref-height: 30px;
-    -fx-pref-width: 153px;
-    -fx-padding: 0 10px;
-    -fx-font-size: 11px;
-    -fx-text-fill: #222;
-    -fx-background-insets: 0;
+    -fx-font-size: 12px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.3, 0, 1);
-    -fx-transition: border-color 0.3s ease, border-width 0.3s ease;
+    -fx-transition: border-color 0.3s ease;
 }
 
+/* ComboBox text field */
+.combo-box .text-field {
+    -fx-background-color: transparent;
+    -fx-padding: 0 10px;
+}
+
+/* ComboBox arrow button */
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0 20px 20px 0;
+    -fx-padding: 0 10px;
+}
+
+.combo-box .arrow {
+    -fx-background-color: #4caf50;
+}
+
+/* ComboBox hover state */
+.combo-box:hover {
+    -fx-border-color: #4caf50;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.4, 0, 1);
+}
+
+/* Minimal DatePicker style with green icon */
+.date-picker {
+    -fx-background-color: white;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 1px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-pref-height: 26px;
+    -fx-font-size: 11px;
+}
+
+/* DatePicker text field */
+.date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0 10px;
+    -fx-font-size: 11px;
+}
+
+/* Arrow button with green color */
+.date-picker .arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0 20px 20px 0;
+    -fx-padding: 0 8px;
+}
+
+.date-picker .arrow-button .arrow {
+    -fx-background-color: #4caf50;
+    -fx-scale-x: 0.7;
+    -fx-scale-y: 0.7;
+}
+
+/* Minimal popup */
+.date-picker-popup {
+    -fx-scale-x: 0.8;
+    -fx-scale-y: 0.8;
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #bdc3c7;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.3, 0, 1);
+    -fx-padding: 4px;
+}
+
+/* Month/year header minimal style */
+.date-picker-popup > * > .month-year-pane {
+    -fx-background-color: #f8f8f8;
+    -fx-padding: 4px;
+    -fx-border-radius: 10px 10px 0 0;
+}
+
+.date-picker-popup > * > .month-year-pane > .spinner > .label {
+    -fx-text-fill: #424242;
+    -fx-font-size: 11px;
+    -fx-font-weight: normal;
+}
+
+/* Green navigation month buttons */
+.date-picker-popup > * > .month-year-pane > .spinner > .button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0 3px;
+}
+
+.date-picker-popup > * > .month-year-pane > .spinner > .button:hover {
+    -fx-background-color: #e8f5e9;
+    -fx-background-radius: 3px;
+}
+
+.date-picker-popup > * > .month-year-pane > .spinner > .button > .left-arrow,
+.date-picker-popup > * > .month-year-pane > .spinner > .button > .right-arrow {
+    -fx-background-color: #4caf50;
+    -fx-scale-x: 0.7;
+    -fx-scale-y: 0.7;
+}
+
+/* Minimal calendar grid */
+.date-picker-popup > * > .calendar-grid {
+    -fx-background-color: transparent;
+    -fx-padding: 2px;
+}
+
+/* Day names minimal style */
+.date-picker-popup > * > .calendar-grid > .day-name-cell {
+    -fx-font-size: 9px;
+    -fx-text-fill: #4caf50;
+    -fx-font-weight: bold;
+}
+
+/* Day cells minimal style */
+.date-picker-popup > * > .calendar-grid > .day-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #424242;
+    -fx-font-size: 10px;
+    -fx-padding: 2px;
+}
+
+/* Day cells hover state */
+.date-picker-popup > * > .calendar-grid > .day-cell:hover {
+    -fx-background-color: #e8f5e9;
+    -fx-text-fill: #4caf50;
+    -fx-background-radius: 50%;
+}
+
+/* Selected day cell - rounded */
+.date-picker-popup > * > .calendar-grid > .day-cell:selected {
+    -fx-background-color: #4caf50;
+    -fx-text-fill: white;
+    -fx-background-radius: 50%;
+}
+
+/* Current day style - thin circle */
+.date-picker-popup > * > .calendar-grid > .today {
+    -fx-border-color: #4caf50;
+    -fx-border-width: 1px;
+    -fx-border-radius: 50%;
+}
+
+/* Days from other months */
+.date-picker-popup > * > .calendar-grid > .previous-month,
+.date-picker-popup > * > .calendar-grid > .next-month {
+    -fx-text-fill: #e0e0e0;
+}
+
+/* Specific style for patient input field */
 .input-field-patient {
     -fx-background-color: white;
     -fx-border-color: #bdc3c7;
@@ -60,92 +184,14 @@
     -fx-transition: border-color 0.3s ease, border-width 0.3s ease;
 }
 
-/* Hover per campi di input */
-.input-field:hover {
-    -fx-border-color: #4caf50;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.4, 0, 1);
-    -fx-border-width: 2px;
+/* Width limit for psychologist fields */
+.psychologist-field {
+    -fx-max-width: 182px;
+    -fx-pref-width: 182px;
 }
 
-/* Focus per campi di input */
-.input-field:focused {
-    -fx-border-color: #228B22;
-    -fx-background-color: #f9f9f9;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.4, 0, 1);
-}
-
-/* Stile per il titolo MINDHARBOR */
-.title-text {
-    -fx-font-family: "KoHo Light";
-    -fx-font-size: 26px;
-    -fx-text-fill: white;
-    -fx-letter-spacing: 10px;
-    -fx-font-weight: 200;
-    -fx-text-alignment: center;
-    -fx-translate-x: -10px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 3, 0.3, 0, 1);
-    -fx-text-fill: rgba(255, 255, 255, 0.8);
-}
-
-.msg-label {
-    -fx-translate-y: -5;
-    -fx-font-weight: bold;
-    -fx-font-family: "KoHo Light";
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
-}
-
-.back-button {
-    -fx-translate-x: 55px;
-    -fx-translate-y: 170px;
-    -fx-background-color: transparent;
-    -fx-padding: 20;
-}
-
-/* Stile per i ComboBox */
-.combo-box {
-    -fx-background-color: white;
-    -fx-border-color: #bdc3c7;
-    -fx-border-radius: 20px;
-    -fx-background-radius: 20px;
-    -fx-pref-height: 30px;
-    -fx-font-size: 12px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.3, 0, 1);
-    -fx-transition: border-color 0.3s ease;
-}
-
-/* Il campo di testo nel ComboBox */
-.combo-box .text-field {
-    -fx-background-color: transparent;
-    -fx-padding: 0 10px;
-}
-
-/* Il pulsante freccia del ComboBox */
-.combo-box .arrow-button {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0 20px 20px 0;
-    -fx-padding: 0 10px;
-}
-
-.combo-box .arrow {
-    -fx-background-color: #4caf50;
-}
-
-/* Hover state per ComboBox */
-.combo-box:hover {
-    -fx-border-color: #4caf50;
-    -fx-border-width: 2px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.4, 0, 1);
-}
-
-/* Stato focused per ComboBox */
-.combo-box:focused {
-    -fx-border-color: #228B22;
-    -fx-background-color: #f9f9f9;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.4, 0, 1);
-}
-
-/* La lista dropdown del ComboBox */
-.combo-box .list-view {
+/* Essential styles for ComboBox popup */
+.combo-box-popup .list-view {
     -fx-background-color: white;
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
@@ -154,193 +200,36 @@
     -fx-padding: 5px;
 }
 
-/* Le celle della lista nel ComboBox */
-.combo-box .list-cell {
+/* List cells in ComboBox */
+.combo-box-popup .list-cell {
     -fx-background-color: transparent;
     -fx-padding: 8px 10px;
     -fx-text-fill: #222;
 }
 
-/* Hover su celle della lista */
-.combo-box .list-cell:hover {
+/* Hover on list cells */
+.combo-box-popup .list-cell:hover {
     -fx-background-color: #f0f0f0;
     -fx-text-fill: #4caf50;
+    -fx-background-radius: 5px;
 }
 
-/* Cella selezionata */
-.combo-box .list-cell:selected {
+/* Selected cell */
+.combo-box-popup .list-cell:selected {
     -fx-background-color: #e8f5e9;
     -fx-text-fill: #2e7d32;
+    -fx-background-radius: 5px;
 }
 
-/* Testo del prompt (placeholder) */
-.combo-box .list-cell:filled:selected .text {
-    -fx-fill: #2e7d32;
+/* Force rounded corners on popup */
+.root .combo-box-popup .list-view {
+    -fx-background-radius: 10px !important;
+    -fx-border-radius: 10px !important;
 }
 
-/* Testo del prompt quando non è selezionato nulla */
-.combo-box .list-cell {
-    -fx-text-fill: #666666;
-}
-
-/* Stilizzazione ComboBox con maggiore specificità */
-.root .combo-box {
-    -fx-background-color: white;
-    -fx-border-color: #bdc3c7;
-    -fx-border-radius: 20px;
-    -fx-background-radius: 20px;
-}
-
-
-.combo-box > .list-cell {
-    -fx-background-radius: 20px 0 0 20px;
-}
-
-.combo-box > .arrow-button {
-    -fx-background-radius: 0 20px 20px 0;
-}
-
-/* Stile per il DatePicker */
-.date-picker {
-    -fx-background-color: white;
-    -fx-border-color: #bdc3c7;
-    -fx-border-radius: 20px;
-    -fx-background-radius: 20px;
-    -fx-pref-height: 30px;
-    -fx-font-size: 12px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.3, 0, 1);
-}
-
-/* Campo di testo del DatePicker */
-.date-picker .text-field {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-padding: 0 10px;
-}
-
-/* Pulsante per aprire il calendario */
-.date-picker .arrow-button {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0 20px 20px 0;
-    -fx-padding: 0 10px;
-}
-
-.date-picker .arrow-button .arrow {
-    -fx-background-color: #4caf50;
-}
-
-/* Hover state */
-.date-picker:hover {
-    -fx-border-color: #4caf50;
-    -fx-border-width: 2px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.4, 0, 1);
-}
-
-/* Focus state */
-.date-picker:focused {
-    -fx-border-color: #228B22;
-    -fx-background-color: #f9f9f9;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.4, 0, 1);
-}
-
-/* Popup del calendario */
-.date-picker-popup {
-    -fx-background-color: white;
-    -fx-background-radius: 10px;
-    -fx-border-radius: 10px;
-    -fx-border-color: #bdc3c7;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.4, 0, 2);
-    -fx-padding: 5px;
-}
-
-/* Intestazione mese e anno */
-.date-picker-popup .month-year-pane {
-    -fx-background-color: #e8f5e9;
-    -fx-padding: 5px;
-    -fx-background-radius: 5px 5px 0 0;
-}
-
-/* Pulsanti previous e next */
-.date-picker-popup .month-year-pane .button {
-    -fx-background-color: transparent;
-    -fx-text-fill: #2e7d32;
-}
-
-.date-picker-popup .month-year-pane .button:hover {
-    -fx-background-color: #c8e6c9;
-    -fx-cursor: hand;
-}
-
-/* Celle dei giorni */
-.date-picker-popup .calendar-grid .day-cell {
-    -fx-background-color: transparent;
-    -fx-text-fill: #222;
-    -fx-padding: 5px;
-}
-
-/* Celle dei giorni in hover */
-.date-picker-popup .calendar-grid .day-cell:hover {
-    -fx-background-color: #e8f5e9;
-    -fx-text-fill: #2e7d32;
-    -fx-cursor: hand;
-}
-
-/* Cella della data selezionata */
-.date-picker-popup .calendar-grid .day-cell:selected {
-    -fx-background-color: #4caf50;
-    -fx-text-fill: white;
-}
-
-/* Stile per i titoli/etichette nel form */
-.form-label {
-    -fx-font-family: "KoHo Light";
-    -fx-font-size: 14px;
-    -fx-text-fill: white;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 2, 0.3, 0, 1);
-}
-
-/* Stile specifico per il form di registrazione */
-.signup-form {
-    -fx-spacing: 15px;
-    -fx-alignment: center;
-}
-
-/* Aggiungi animazione di transizione per elementi interattivi */
-.input-field, .combo-box, .date-picker, .access_button {
-    -fx-transition: all 0.3s ease;
-}
-
-/* Stile per il contenitore dei form a più pagine */
-.form-container {
-    -fx-background-color: rgba(0, 0, 0, 0.2);
-    -fx-background-radius: 30px;
-    -fx-padding: 20px;
-}
-
-/* Stili per i pulsanti di navigazione tra pagine del form */
-.nav-button {
-    -fx-background-color: rgba(255, 255, 255, 0.2);
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-padding: 8px 15px;
-    -fx-border-radius: 15px;
-    -fx-background-radius: 15px;
-    -fx-cursor: hand;
-}
-
-.nav-button:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.3);
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0.4, 0, 2);
-}
-
-/* Stile per indicatori di progresso (se utilizzi indicatori per le pagine del form) */
-.progress-indicator {
-    -fx-background-color: rgba(255, 255, 255, 0.2);
-    -fx-border-radius: 10px;
-    -fx-background-radius: 10px;
-    -fx-padding: 5px;
-}
-
-.progress-indicator .active {
-    -fx-background-color: #4caf50;
+/* Standard class for input fields with uniform width */
+.standard-field {
+    -fx-pref-width: 182px;
+    -fx-min-width: 182px;
+    -fx-max-width: 182px;
 }

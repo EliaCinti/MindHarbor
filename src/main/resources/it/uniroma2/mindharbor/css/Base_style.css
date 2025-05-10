@@ -1,0 +1,94 @@
+/* base_style.css - Common styles for MindHarbor application */
+
+/* Button styles */
+.button {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease-in-out;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.4, 0, 2);
+}
+
+.button:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0.5, 0, 3);
+}
+
+.button:pressed {
+    -fx-background-color: #2e7d32;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0.5, 0, 2);
+    -fx-scale-x: 1.0;
+    -fx-scale-y: 1.0;
+}
+
+/* Input field styles */
+.input-field {
+    -fx-background-color: white;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 20px;
+    -fx-border-width: 1px;
+    -fx-background-radius: 20px;
+    -fx-padding: 0 15px;
+    -fx-font-size: 12px;
+    -fx-text-fill: #222;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.3, 0, 1);
+    -fx-transition: border-color 0.3s ease, border-width 0.3s ease;
+}
+
+.input-field:hover {
+    -fx-border-color: #4caf50;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.4, 0, 1);
+    -fx-border-width: 2px;
+}
+
+.input-field:focused {
+    -fx-border-color: #228B22;
+    -fx-background-color: #f9f9f9;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.4, 0, 1);
+}
+
+/* Title style */
+.title-text {
+    -fx-font-family: "KoHo Light";
+    -fx-font-size: 26px;
+    -fx-text-fill: white;
+    -fx-letter-spacing: 10px;
+    -fx-font-weight: 200;
+    -fx-text-alignment: center;
+    -fx-translate-x: -10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 3, 0.3, 0, 1);
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+/* Message label style */
+.msg-label {
+    -fx-translate-y: -5;
+    -fx-font-weight: bold;
+    -fx-font-family: "KoHo Light";
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
+}
+
+/* Back button style */
+.back-button {
+    -fx-translate-x: 55px;
+    -fx-translate-y: 170px;
+    -fx-background-color: transparent;
+    -fx-padding: 20;
+}
+
+/* Styles for validation */
+.validation-error {
+    -fx-border-color: #f44336;
+    -fx-border-width: 2px;
+}
+
+/* Standard class for all input fields with uniform width */
+.standard-field {
+    -fx-pref-width: 182px;
+    -fx-min-width: 182px;
+    -fx-max-width: 182px;
+}

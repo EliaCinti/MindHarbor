@@ -16,8 +16,9 @@
     <ImageView fitHeight="419.0" fitWidth="728.0" layoutX="-65.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true">
         <Image url="@../Img/sondo.png" />
     </ImageView>
-    <TextField fx:id="usernameTextField" layoutX="209.0" layoutY="177.0" prefHeight="26.0" prefWidth="149.0" promptText="Username" styleClass="input-field" />
-    <PasswordField fx:id="passwordTextField" layoutX="209.0" layoutY="220.0" prefHeight="26.0" prefWidth="170.0" promptText="Password" styleClass="input-field" />
+    <!-- Modificati entrambi i campi per avere larghezza 182px e centrarti meglio -->
+    <TextField fx:id="usernameTextField" layoutX="209.0" layoutY="177.0" prefHeight="26.0" prefWidth="182.0" promptText="Username" styleClass="input-field, standard-field" />
+    <PasswordField fx:id="passwordTextField" layoutX="209.0" layoutY="220.0" prefHeight="26.0" prefWidth="182.0" promptText="Password" styleClass="input-field, standard-field" />
     <Button fx:id="loginButton" alignment="CENTER" contentDisplay="CENTER" layoutX="256.0" layoutY="277.0" mnemonicParsing="false" onAction="#onSignInClick" prefHeight="26.0" prefWidth="98.0" styleClass="access_button" text="SIGN IN" textAlignment="CENTER" />
     <Label fx:id="msgLbl" alignment="CENTER" layoutX="164.0" layoutY="259.0" prefHeight="18.0" prefWidth="272.0" styleClass="msg-label" textFill="WHITE">
     </Label>
@@ -25,16 +26,16 @@
     <ImageView fitHeight="66.0" fitWidth="20.0" layoutX="336.0" layoutY="331.0" pickOnBounds="true" preserveRatio="true">
         <Image url="@../Img/IconaLoginGoogle.png" />
     </ImageView>
-   <Label alignment="CENTER" layoutX="113.0" layoutY="135.0" prefHeight="34.0" prefWidth="390.0" styleClass="title-text" text="MINDHARBOR" textAlignment="CENTER" textFill="WHITE">
-      <font>
-         <Font name="KoHo Light" size="25.0" />
-      </font>
-   </Label>
-   <Label fx:id="backButton" layoutY="5.0" onMouseClicked="#onBackButtonClicked" styleClass="back-button">
-      <graphic>
-          <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="76.0" layoutY="187.0">
-              <Image url="@../Img/bigBackArrow-v2.png"/>
-          </ImageView>
-      </graphic>
-   </Label>
+    <Label alignment="CENTER" layoutX="113.0" layoutY="135.0" prefHeight="34.0" prefWidth="390.0" styleClass="title-text" text="MINDHARBOR" textAlignment="CENTER" textFill="WHITE">
+        <font>
+            <Font name="KoHo Light" size="25.0" />
+        </font>
+    </Label>
+    <Label fx:id="backButton" layoutY="5.0" onMouseClicked="#onBackButtonClicked" styleClass="back-button">
+        <graphic>
+            <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="76.0" layoutY="187.0">
+                <Image url="@../Img/bigBackArrow-v2.png"/>
+            </ImageView>
+        </graphic>
+    </Label>
 </AnchorPane>

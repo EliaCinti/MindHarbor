@@ -1,4 +1,4 @@
-/* Stile per i bottoni */
+/* Button styles */
 .button {
     -fx-text-fill: white;
     -fx-font-size: 16px;
@@ -9,19 +9,19 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.4, 0, 2);
 }
 
-/* Stile per il sign in */
+/* Sign in button style */
 .signIn_button {
     -fx-background-color: linear-gradient(to right, #4caf50, #66bb6a);
     -fx-cursor: hand;
 }
 
-/* stile per il sign up */
+/* Sign up button style */
 .signUp_button {
     -fx-background-color: linear-gradient(to right, #309133, #366f39);
     -fx-cursor: hand;
 }
 
-/* Stile hover (quando il mouse passa sopra il pulsante) */
+/* Hover style for sign in button (when mouse hovers over the button) */
 .signIn_button:hover {
     -fx-background-color: linear-gradient(to right, #43a047, #66bb6a);
     -fx-scale-x: 1.1;
@@ -29,7 +29,7 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0.5, 0, 3);
 }
 
-/* Stile hover (quando il mouse passa sopra il pulsante) */
+/* Hover style for sign up button (when mouse hovers over the button) */
 .signUp_button:hover {
     -fx-background-color: linear-gradient(to right, #309133, #366f39);
     -fx-scale-x: 1.1;
@@ -38,7 +38,7 @@
 }
 
 
-/* Stile per lo stato premuto (click del mouse) */
+/* Pressed state style (mouse click) */
 .button:pressed {
     -fx-background-color: #2e7d32;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0.5, 0, 2);
@@ -46,7 +46,7 @@
     -fx-scale-y: 1.0;
 }
 
-/* Stile per il titolo MINDHARBOR */
+/* Style for MINDHARBOR title */
 .title-text {
     -fx-font-family: "KoHo Light";
     -fx-font-size: 26px;
