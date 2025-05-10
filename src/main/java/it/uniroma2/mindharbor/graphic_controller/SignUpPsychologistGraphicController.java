@@ -11,7 +11,7 @@ import it.uniroma2.mindharbor.utilities.SignUpDataSingleton;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -30,9 +30,9 @@ public class SignUpPsychologistGraphicController {
     @FXML
     private Label msgLbl;
     @FXML
-    private PasswordField officeTextField;
+    private TextField officeTextField;
     @FXML
-    private PasswordField hourlyCostTextField1;
+    private TextField hourlyCostTextField1;
     @FXML
     private Button signUpButton;
     @FXML
