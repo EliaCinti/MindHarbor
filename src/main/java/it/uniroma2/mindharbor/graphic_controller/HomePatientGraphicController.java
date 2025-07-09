@@ -94,8 +94,11 @@ public class HomePatientGraphicController {
         try {
             // Prima aggiorna i dati del paziente dal database per assicurarti
             // di avere le informazioni più recenti sugli appuntamenti
-            homeController.refreshPatientData();
-
+            boolean b = homeController.refreshPatientData();
+            if(!b) {
+                // Error message
+                logger.log(Level.SEVERE, "Unable to load appointment list page");
+            }
             Stage stage = (Stage) appointmentList.getScene().getWindow();
             stage.close();
             navigatorSingleton.gotoPage("/it/uniroma2/mindharbor/fxml/AppointmentList.fxml");

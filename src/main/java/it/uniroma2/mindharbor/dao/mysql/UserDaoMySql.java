@@ -8,7 +8,6 @@ import it.uniroma2.mindharbor.dao.mysql.constants.UserDaoMySqlConstants;
 import it.uniroma2.mindharbor.dao.mysql.constants.UserDaoMySqlQueries;
 import it.uniroma2.mindharbor.exception.DAOException;
 import it.uniroma2.mindharbor.utilities.PasswordUtils;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

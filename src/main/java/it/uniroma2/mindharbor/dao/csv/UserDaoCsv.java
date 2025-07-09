@@ -7,7 +7,6 @@ import it.uniroma2.mindharbor.dao.csv.constants.UserDaoCsvConstants;
 import it.uniroma2.mindharbor.exception.DAOException;
 import it.uniroma2.mindharbor.utilities.CsvUtilities;
 import it.uniroma2.mindharbor.utilities.PasswordUtils;
-
 import java.io.File;
 import java.util.List;
 
