@@ -31,6 +31,8 @@ public class PatientDaoMySqlQueries {
                     "JOIN Users u ON p.Username = u.Username " +
                     "WHERE p.Username = ?";
 
+    public static final String SELECT_ALL_PATIENTS = "SELECT p.Username, u.Firstname, u.Lastname, u.Gender, p.Psychologist, p.BirthDate FROM Patients p JOIN Users u ON p.Username = u.Username";
+
     /**
      * SQL query to select all patients assigned to a specific psychologist.
      */

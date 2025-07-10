@@ -2,6 +2,7 @@ package it.uniroma2.mindharbor.dao.csv;
 
 import it.uniroma2.mindharbor.beans.PatientBean;
 import it.uniroma2.mindharbor.beans.UserBean;
+import it.uniroma2.mindharbor.dao.AbstractObservableDao;
 import it.uniroma2.mindharbor.dao.PatientDao;
 import it.uniroma2.mindharbor.dao.UserDao;
 import it.uniroma2.mindharbor.dao.csv.constants.PatientDaoCsvConstants;
@@ -10,6 +11,7 @@ import it.uniroma2.mindharbor.exception.DAOException;
 import it.uniroma2.mindharbor.model.Patient;
 import it.uniroma2.mindharbor.model.Psychologist;
 import it.uniroma2.mindharbor.patterns.facade.DaoFactoryFacade;
+import it.uniroma2.mindharbor.patterns.observer.DaoOperation;
 import it.uniroma2.mindharbor.utilities.CsvUtilities;
 
 import java.io.File;
@@ -17,29 +19,42 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Implementation of the PatientDao interface for CSV-based persistence.
- * This class manages patient data stored in a CSV file.
- */
-public class PatientDaoCsv implements PatientDao {
+public class PatientDaoCsv extends AbstractObservableDao implements PatientDao {
 
-    private static final File fd = new File(it.uniroma2.mindharbor.dao.csv.constants.PatientDaoCsvConstants.PATH_NAME_PATIENTS);
+    private static final File fd = new File(PatientDaoCsvConstants.PATH_NAME_PATIENTS);
 
     @Override
     public void savePatient(PatientBean patient) throws DAOException {
         UserDao userDao = DaoFactoryFacade.getInstance().getUserDao();
-        userDao.saveUser(patient);
+        // Rendi l'operazione robusta per la sincronizzazione
+        try {
+            userDao.saveUser(patient);
+        } catch (DAOException e) {
+            if (!e.getMessage().contains(UserDaoCsvConstants.USER_EXIST)) {
+                throw e;
+            }
+            // Se l'utente esiste già, va bene, la sincronizzazione può procedere.
+        }
+
         String[] patientRecord = new String[PatientDaoCsvConstants.HEADER.length];
         patientRecord[PatientDaoCsvConstants.PATIENT_INDEX_USERNAME] = patient.getUsername();
         patientRecord[PatientDaoCsvConstants.PATIENT_INDEX_BIRTHDATE] = patient.getBirthDate().toString();
+        // Quando si crea un paziente, non ha ancora uno psicologo assegnato
+        patientRecord[PatientDaoCsvConstants.PATIENT_INDEX_PSYCOLOGIST] = "";
+
         CsvUtilities.writeFile(fd, patientRecord);
+        notifyObservers(DaoOperation.INSERT, "Patient", patient.getUsername(), patient);
     }
 
     @Override
     public Patient retrievePatient(String username) throws DAOException {
         UserDao userDao = DaoFactoryFacade.getInstance().getUserDao();
         String[] userInfo = userDao.retrieveUser(username);
+        if (userInfo == null) return null; // Se l'utente non esiste, il paziente non può esistere
+
         String[] patientInfo = retrievePatientRecord(username);
+        if (patientInfo == null) return null;
+
         return new Patient(
                 userInfo[UserDaoCsvConstants.USER_INDEX_USERNAME],
                 userInfo[UserDaoCsvConstants.USER_INDEX_FIRST_NAME],
@@ -51,20 +66,45 @@ public class PatientDaoCsv implements PatientDao {
     }
 
     @Override
+    public List<Patient> retrieveAllPatients() throws DAOException {
+        List<Patient> patients = new ArrayList<>();
+        List<String[]> records = CsvUtilities.readAll(fd);
+        if (!records.isEmpty() && "Username".equals(records.getFirst()[0])) {
+            records.removeFirst(); // Rimuovi header
+        }
+
+        for (String[] record : records) {
+            // Per ogni paziente nel CSV, recuperiamo i suoi dati utente completi
+            Patient patient = retrievePatient(record[PatientDaoCsvConstants.PATIENT_INDEX_USERNAME]);
+            if (patient != null) {
+                patients.add(patient);
+            }
+        }
+        return patients;
+    }
+
+    @Override
     public List<Patient> retrievePatientsByPsychologist(Psychologist psychologist) throws DAOException {
         UserDao userDao = DaoFactoryFacade.getInstance().getUserDao();
-        List<String[]> patientRecord = CsvUtilities.readAll(fd);
+        List<String[]> patientRecords = CsvUtilities.readAll(fd);
+        if (!patientRecords.isEmpty()) patientRecords.removeFirst(); // Rimuovi header
+
         List<Patient> patients = new ArrayList<>();
-        for (String[] recordPatient : patientRecord) {
-            if (recordPatient[PatientDaoCsvConstants.PATIENT_INDEX_PSYCOLOGIST].equals(psychologist.getUsername())) {
+        for (String[] recordPatient : patientRecords) {
+            if (recordPatient.length > PatientDaoCsvConstants.PATIENT_INDEX_PSYCOLOGIST &&
+                    psychologist.getUsername().equals(recordPatient[PatientDaoCsvConstants.PATIENT_INDEX_PSYCOLOGIST])) {
+
                 String[] userInfo = userDao.retrieveUser(recordPatient[PatientDaoCsvConstants.PATIENT_INDEX_USERNAME]);
-                patients.add(new Patient(recordPatient[PatientDaoCsvConstants.PATIENT_INDEX_USERNAME],
-                        userInfo[UserDaoCsvConstants.USER_INDEX_FIRST_NAME],
-                        userInfo[UserDaoCsvConstants.USER_INDEX_LAST_NAME],
-                        userInfo[UserDaoCsvConstants.USER_INDEX_GENDER],
-                        recordPatient[PatientDaoCsvConstants.PATIENT_INDEX_PSYCOLOGIST],
-                        LocalDate.parse(recordPatient[PatientDaoCsvConstants.PATIENT_INDEX_BIRTHDATE])
-                ));
+                if (userInfo != null) {
+                    patients.add(new Patient(
+                            recordPatient[PatientDaoCsvConstants.PATIENT_INDEX_USERNAME],
+                            userInfo[UserDaoCsvConstants.USER_INDEX_FIRST_NAME],
+                            userInfo[UserDaoCsvConstants.USER_INDEX_LAST_NAME],
+                            userInfo[UserDaoCsvConstants.USER_INDEX_GENDER],
+                            recordPatient[PatientDaoCsvConstants.PATIENT_INDEX_PSYCOLOGIST],
+                            LocalDate.parse(recordPatient[PatientDaoCsvConstants.PATIENT_INDEX_BIRTHDATE])
+                    ));
+                }
             }
         }
         return patients;
@@ -74,7 +114,9 @@ public class PatientDaoCsv implements PatientDao {
     public void updatePatient(Patient patient, UserBean user) throws DAOException {
         UserDao userDao = DaoFactoryFacade.getInstance().getUserDao();
         userDao.updateUser(user);
+
         List<String[]> patientTable = CsvUtilities.readAll(fd);
+        String[] header = patientTable.removeFirst();
         boolean found = false;
         for (String[] recordPatient : patientTable) {
             if (recordPatient[PatientDaoCsvConstants.PATIENT_INDEX_USERNAME].equals(patient.getUsername())) {
@@ -87,38 +129,40 @@ public class PatientDaoCsv implements PatientDao {
         if (!found) {
             throw new DAOException(PatientDaoCsvConstants.PATIENT_NOT_FOUND + patient.getUsername());
         }
-        CsvUtilities.updateFile(fd, PatientDaoCsvConstants.HEADER, patientTable);
+        CsvUtilities.updateFile(fd, header, patientTable);
+        notifyObservers(DaoOperation.UPDATE, "Patient", patient.getUsername(), patient);
     }
 
     @Override
     public void deletePatient(String username) throws DAOException {
         UserDao userDao = DaoFactoryFacade.getInstance().getUserDao();
-        userDao.deleteUser(username);
+        try {
+            userDao.deleteUser(username);
+        } catch (DAOException e) {
+            if (!e.getMessage().contains(UserDaoCsvConstants.USER_NOT_FOUND)) {
+                throw e;
+            }
+        }
+
         List<String[]> patientTable = CsvUtilities.readAll(fd);
+        String[] header = patientTable.removeFirst();
         boolean removed = patientTable.removeIf(recordPatient -> recordPatient[PatientDaoCsvConstants.PATIENT_INDEX_USERNAME].equals(username));
         if (!removed) {
             throw new DAOException(PatientDaoCsvConstants.PATIENT_NOT_FOUND + username);
         }
-        CsvUtilities.updateFile(fd, PatientDaoCsvConstants.HEADER, patientTable);
+        CsvUtilities.updateFile(fd, header, patientTable);
+        notifyObservers(DaoOperation.DELETE, "Patient", username, null);
     }
 
-    /**
-     * Retrieves a specific patient's record from the CSV file based on their username.
-     * Iterates through all records in the CSV file until it finds a matching username.
-     *
-     * @param username The username of the patient whose record is to be retrieved.
-     * @return A string array representing the patient's record, or null if no record is found.
-     * @throws DAOException If an error occurs while reading the CSV file.
-     */
     private String[] retrievePatientRecord(String username) throws DAOException {
         List<String[]> patientTable = CsvUtilities.readAll(fd);
-        String[] patientRecord = null;
-        while (!patientTable.isEmpty()) {
-            patientRecord = patientTable.removeFirst();
-            if (username.equals(patientRecord[PatientDaoCsvConstants.PATIENT_INDEX_USERNAME])) {
+        if (!patientTable.isEmpty()) patientTable.removeFirst(); // Rimuovi header
+
+        for (String[] patientRecord : patientTable) {
+            if (patientRecord.length > PatientDaoCsvConstants.PATIENT_INDEX_USERNAME && username.equals(patientRecord[PatientDaoCsvConstants.PATIENT_INDEX_USERNAME])) {
                 return patientRecord;
             }
         }
-        return patientRecord;
+        return null;
     }
 }

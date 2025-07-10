@@ -145,6 +145,18 @@ public class Patient extends User {
         return appointmentListAfter;
     }
 
+    public boolean isDataEquivalent(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Patient patient = (Patient) o;
+        return getUsername().equals(patient.getUsername()) &&
+                getName().equals(patient.getName()) &&
+                getSurname().equals(patient.getSurname()) &&
+                getGender().equals(patient.getGender()) &&
+                java.util.Objects.equals(getPsychologist(), patient.getPsychologist()) &&
+                getBirthday().equals(patient.getBirthday());
+    }
+
     /**
      * Compares this patient with another object to determine equality, based primarily on the username.
      *
@@ -168,5 +180,7 @@ public class Patient extends User {
     public int hashCode() {
         return super.hashCode();
     }
+
+
 
 }

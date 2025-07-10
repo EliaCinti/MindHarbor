@@ -28,6 +28,8 @@ public class AppointmentDaoMySqlQueries {
     public static final String SELECT_APPOINTMENT_BY_ID =
             "SELECT * FROM Appointments WHERE id = ?";
 
+    public static final String SELECT_ALL_APPOINTMENTS = "SELECT * FROM Appointments";
+
     /**
      * SQL query to select all appointments for a specific patient.
      */

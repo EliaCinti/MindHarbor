@@ -41,6 +41,8 @@ public interface PatientDao {
      */
     Patient retrievePatient(String username) throws DAOException;
 
+    List<Patient> retrieveAllPatients() throws DAOException;
+
     /**
      * Retrieves a list of patients assigned to a specific psychologist.
      * <p>

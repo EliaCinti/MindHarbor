@@ -2,40 +2,25 @@ package it.uniroma2.mindharbor.dao.mysql;
 
 import it.uniroma2.mindharbor.beans.CredentialsBean;
 import it.uniroma2.mindharbor.beans.UserBean;
+import it.uniroma2.mindharbor.dao.AbstractObservableDao;
 import it.uniroma2.mindharbor.dao.ConnectionFactory;
 import it.uniroma2.mindharbor.dao.UserDao;
 import it.uniroma2.mindharbor.dao.mysql.constants.UserDaoMySqlConstants;
 import it.uniroma2.mindharbor.dao.mysql.constants.UserDaoMySqlQueries;
 import it.uniroma2.mindharbor.exception.DAOException;
+import it.uniroma2.mindharbor.patterns.observer.DaoOperation;
 import it.uniroma2.mindharbor.utilities.PasswordUtils;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * MySQL's implementation of the {@link UserDao} interface.
- * <p>
- * This class provides MySQL-specific implementations for user-related data
- * access operations, such as validating a user, saving user information,
- * retrieving user details, updating user data, and deleting users.
- * </p>
- * <p>
- * This implementation uses ConnectionFactory to obtain database connections.
- * </p>
- */
-public class UserDaoMySql implements UserDao {
+public class UserDaoMySql extends AbstractObservableDao implements UserDao {
 
     private static final Logger logger = Logger.getLogger(UserDaoMySql.class.getName());
 
-    /**
-     * Gets a connection from the connection factory.
-     *
-     * @return A database connection
-     * @throws DAOException If there is an error obtaining a connection
-     */
     private Connection getConnection() throws DAOException {
         try {
             return ConnectionFactory.getConnection();
@@ -45,68 +30,27 @@ public class UserDaoMySql implements UserDao {
         }
     }
 
-    /**
-     * Validates a user by checking if the provided username and password match
-     * an existing record in the database.
-     * <p>
-     * If a match is found, the user's type is retrieved and set in the
-     * {@link CredentialsBean}.
-     * Otherwise, the {@code type} remains {@code null}.
-     * </p>
-     *
-     * @param credentials The {@link CredentialsBean} containing the username and password to validate.
-     * @throws DAOException If an error occurs while accessing the data storage.
-     */
     @Override
     public void validateUser(CredentialsBean credentials) throws DAOException {
-        try (Connection connection = getConnection();
-             PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.VALIDATE_USER)) {
+        String[] user = retrieveUser(credentials.getUsername());
 
-            stmt.setString(1, credentials.getUsername());
-
-            // When validating, we want to compare with the hashed password
-            // Since we can't decrypt the hashed password, we need to check differently
-            // to First get the user by username
-            String[] user = retrieveUser(credentials.getUsername());
-
-            if (user != null) {
-                // Check if the provided password matches the stored hash
-                String storedPassword = user[1]; // Password is at index 1
-
-                if (PasswordUtils.checkPassword(credentials.getPassword(), storedPassword)) {
-                    // Password matches, set the user type
-                    credentials.setType(user[4]); // Type is at index 4
-                }
+        if (user != null) {
+            String storedPassword = user[1]; // Password is at index 1
+            if (PasswordUtils.checkPassword(credentials.getPassword(), storedPassword)) {
+                credentials.setType(user[4]); // Type is at index 4
             }
-
-        } catch (SQLException e) {
-            throw new DAOException(UserDaoMySqlConstants.ERROR_VALIDATING_USER + e.getMessage(), e);
         }
     }
 
-    /**
-     * Saves a new user in the database.
-     * <p>
-     * If a user with the same username already exists, a {@link DAOException} is thrown.
-     * Otherwise, the user details are stored.
-     * </p>
-     *
-     * @param user The {@link UserBean} object containing the user's details.
-     * @throws DAOException If an error occurs while saving the user or if the user already exists.
-     */
     @Override
     public void saveUser(UserBean user) throws DAOException {
-        // First check if the username is already taken
         if (isUsernameTaken(user.getUsername())) {
             throw new DAOException(UserDaoMySqlConstants.USERNAME_ALREADY_EXISTS + user.getUsername());
         }
 
-        try (Connection connection = getConnection();
-             PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.INSERT_USER)) {
-
-            // Hash the password before storing
+        Connection connection = getConnection();
+        try (PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.INSERT_USER)) {
             String hashedPassword = PasswordUtils.hashPassword(user.getPassword());
-
             stmt.setString(1, user.getUsername());
             stmt.setString(2, hashedPassword);
             stmt.setString(3, user.getName());
@@ -118,31 +62,17 @@ public class UserDaoMySql implements UserDao {
             if (rowsAffected == 0) {
                 throw new DAOException(UserDaoMySqlConstants.FAILED_TO_SAVE_USER);
             }
-
         } catch (SQLException e) {
             throw new DAOException(UserDaoMySqlConstants.ERROR_SAVING_USER + e.getMessage(), e);
         }
+        notifyObservers(DaoOperation.INSERT, "User", user.getUsername(), user);
     }
 
-    /**
-     * Retrieves user details from the database based on the username.
-     * <p>
-     * The method searches for a user with the specified username and returns an array of strings
-     * containing the user's details.
-     * If no match is found, {@code null} is returned.
-     * </p>
-     *
-     * @param username The username of the user to retrieve.
-     * @return A {@code String[]} containing the user's details if found, otherwise {@code null}.
-     * @throws DAOException If an error occurs while accessing the data storage.
-     */
     @Override
     public String[] retrieveUser(String username) throws DAOException {
-        try (Connection connection = getConnection();
-             PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.SELECT_USER_BY_USERNAME)) {
-
+        Connection connection = getConnection();
+        try (PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.SELECT_USER_BY_USERNAME)) {
             stmt.setString(1, username);
-
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     String[] userDetails = new String[6];
@@ -155,69 +85,65 @@ public class UserDaoMySql implements UserDao {
                     return userDetails;
                 }
             }
-
-            return null; // User not found
-
+            return null;
         } catch (SQLException e) {
             throw new DAOException(UserDaoMySqlConstants.ERROR_RETRIEVING_USER + e.getMessage(), e);
         }
     }
 
-    /**
-     * Checks if a username is already taken in the database.
-     *
-     * @param username The username to check.
-     * @return true if the username is already in use, false otherwise.
-     * @throws DAOException If an error occurs while accessing the data storage.
-     */
+    @Override
+    public List<UserBean> retrieveAllUsers() throws DAOException {
+        List<UserBean> users = new ArrayList<>();
+        Connection connection = getConnection();
+        try (PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.SELECT_ALL_USERS);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                UserBean user = new UserBean.Builder<>()
+                        .username(rs.getString("Username"))
+                        .password(rs.getString("Password"))
+                        .name(rs.getString("Firstname"))
+                        .surname(rs.getString("Lastname"))
+                        .type(rs.getString("Type"))
+                        .gender(rs.getString("Gender"))
+                        .build();
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Error retrieving all users: " + e.getMessage(), e);
+        }
+        return users;
+    }
+
     @Override
     public boolean isUsernameTaken(String username) throws DAOException {
-        try (Connection connection = getConnection();
-             PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.CHECK_USERNAME_EXISTS)) {
-
+        Connection connection = getConnection();
+        try (PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.CHECK_USERNAME_EXISTS)) {
             stmt.setString(1, username);
-
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1) > 0;
                 }
             }
-
             return false;
-
         } catch (SQLException e) {
             throw new DAOException(UserDaoMySqlConstants.ERROR_CHECKING_USERNAME + e.getMessage(), e);
         }
     }
 
-    /**
-     * Updates an existing user's details in the database.
-     * <p>
-     * If the user does not exist, a {@link DAOException} is thrown.
-     * Otherwise, the user's information is updated.
-     * </p>
-     *
-     * @param user The {@link UserBean} object containing the updated details.
-     * @throws DAOException If an error occurs while updating the user.
-     */
     @Override
     public void updateUser(UserBean user) throws DAOException {
-        try (Connection connection = getConnection();
-             PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.UPDATE_USER)) {
+        String[] currentUser = retrieveUser(user.getUsername());
+        if (currentUser == null) {
+            throw new DAOException(UserDaoMySqlConstants.USER_NOT_FOUND + user.getUsername());
+        }
 
-            // Check if the original password has changed and needs to be hashed
-            String[] currentUser = retrieveUser(user.getUsername());
-            if (currentUser == null) {
-                throw new DAOException(UserDaoMySqlConstants.USER_NOT_FOUND + user.getUsername());
-            }
-
+        Connection connection = getConnection();
+        try (PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.UPDATE_USER)) {
             String passwordToStore;
-            if (currentUser[1].equals(user.getPassword())) {
-                // Password unchanged, store as is
-                passwordToStore = user.getPassword();
-            } else {
-                // Password changed, hash the new password
+            if (user.getPassword() != null && !user.getPassword().isEmpty() && !PasswordUtils.checkPassword(user.getPassword(), currentUser[1])) {
                 passwordToStore = PasswordUtils.hashPassword(user.getPassword());
+            } else {
+                passwordToStore = currentUser[1];
             }
 
             stmt.setString(1, passwordToStore);
@@ -225,42 +151,30 @@ public class UserDaoMySql implements UserDao {
             stmt.setString(3, user.getSurname());
             stmt.setString(4, user.getType());
             stmt.setString(5, user.getGender());
-            stmt.setString(6, user.getUsername()); // WHERE clause parameter
+            stmt.setString(6, user.getUsername());
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected == 0) {
                 throw new DAOException(UserDaoMySqlConstants.USER_NOT_FOUND + user.getUsername());
             }
-
         } catch (SQLException e) {
             throw new DAOException(UserDaoMySqlConstants.ERROR_UPDATING_USER + e.getMessage(), e);
         }
+        notifyObservers(DaoOperation.UPDATE, "User", user.getUsername(), user);
     }
 
-    /**
-     * Deletes a user from the database.
-     * <p>
-     * If the user does not exist, a {@link DAOException} is thrown.
-     * </p>
-     *
-     * @param username The username of the user to delete.
-     * @throws DAOException If an error occurs while deleting the user.
-     */
     @Override
     public void deleteUser(String username) throws DAOException {
-        try (Connection connection = getConnection();
-             PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.DELETE_USER)) {
-
+        Connection connection = getConnection();
+        try (PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.DELETE_USER)) {
             stmt.setString(1, username);
-
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected == 0) {
                 throw new DAOException(UserDaoMySqlConstants.USER_NOT_FOUND + username);
             }
-
         } catch (SQLException e) {
             throw new DAOException(UserDaoMySqlConstants.ERROR_DELETING_USER + e.getMessage(), e);
         }
+        notifyObservers(DaoOperation.DELETE, "User", username, null);
     }
-
 }

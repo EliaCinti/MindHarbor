@@ -31,6 +31,8 @@ public class PsychologistDaoMySqlQueries {
                     "JOIN Users u ON p.Username = u.Username " +
                     "WHERE p.Username = ?";
 
+    public static final String SELECT_ALL_PSYCHOLOGISTS = "SELECT p.Username, u.Firstname, u.Lastname, u.Gender, p.Office, p.HourlyCost FROM Psychologists p JOIN Users u ON p.Username = u.Username";
+
     /**
      * SQL query to update a psychologist's information.
      */

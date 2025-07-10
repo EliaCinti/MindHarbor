@@ -3,6 +3,7 @@ package it.uniroma2.mindharbor;
 import it.uniroma2.mindharbor.dao.ConnectionFactory;
 import it.uniroma2.mindharbor.patterns.facade.DaoFactoryFacade;
 import it.uniroma2.mindharbor.patterns.facade.PersistenceType;
+import it.uniroma2.mindharbor.sync.InitialSyncManager;
 import it.uniroma2.mindharbor.utilities.NavigatorSingleton;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -73,6 +74,7 @@ public class Main extends Application {
 
         String persistenceType = args.length > 0 ? args[0].toLowerCase() : "mysql";
         String interfaceType = args.length > 1 ? args[1].toLowerCase() : "gui";
+        PersistenceType primaryPersistenceType;
 
         logger.info("Starting MindHarbor with persistence: " + persistenceType + ", interface: " + interfaceType);
 
@@ -82,19 +84,25 @@ public class Main extends Application {
                 boolean connectionOk = ConnectionFactory.testConnection();
                 if (!connectionOk) {
                     logger.warning("Database connection test failed. Switching to CSV persistence.");
-                    daoFactoryFacade.setPersistenceType(PersistenceType.CSV);
+                    primaryPersistenceType = PersistenceType.CSV;
                 } else {
                     logger.info("Database connection test successful");
+                    primaryPersistenceType = PersistenceType.MYSQL;
                 }
             } catch (Exception e) {
                 logger.log(Level.WARNING, "Error testing database connection: " + e.getMessage());
                 logger.info("Switching to CSV persistence due to connection error");
-                daoFactoryFacade.setPersistenceType(PersistenceType.CSV);
+                primaryPersistenceType = PersistenceType.CSV;
             }
         } else {
             logger.info("Using CSV persistence as specified");
-            daoFactoryFacade.setPersistenceType(PersistenceType.CSV);
+            primaryPersistenceType = PersistenceType.CSV;
         }
+
+        InitialSyncManager initialSyncManager = new InitialSyncManager();
+        initialSyncManager.performInitialSync(primaryPersistenceType);
+
+        daoFactoryFacade.setPersistenceType(primaryPersistenceType);
 
         if ("gui".equals(interfaceType)) {
             logger.info("Launching GUI interface");

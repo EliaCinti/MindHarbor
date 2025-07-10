@@ -36,6 +36,8 @@ public interface AppointmentDao {
      */
     Appointment retrieveAppointment(int appointmentId) throws DAOException;
 
+    List<Appointment> retrieveAllAppointments() throws DAOException;
+
     /**
      * Retrieves all appointments for a specific patient.
      *

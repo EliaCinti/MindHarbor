@@ -22,6 +22,8 @@ public class UserDaoMySqlQueries {
     public static final String VALIDATE_USER =
             "SELECT Type FROM Users WHERE Username = ? AND Password = ?";
 
+    public static final String SELECT_ALL_USERS = "SELECT Username, Password, Firstname, Lastname, Type, Gender FROM Users";
+
     /**
      * SQL query to insert a new user.
      */

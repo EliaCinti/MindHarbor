@@ -4,6 +4,8 @@ import it.uniroma2.mindharbor.beans.CredentialsBean;
 import it.uniroma2.mindharbor.beans.UserBean;
 import it.uniroma2.mindharbor.exception.DAOException;
 
+import java.util.List;
+
 /**
  * The {@code UserDao} interface defines data access operations for managing users.
  * <p>
@@ -49,6 +51,8 @@ public interface UserDao {
      * @throws DAOException If an error occurs while accessing the data storage.
      */
     String[] retrieveUser(String username) throws DAOException;
+
+    List<UserBean> retrieveAllUsers() throws DAOException;
 
     /**
      * Verifica se un username è già presente nel sistema.

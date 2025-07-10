@@ -44,7 +44,7 @@
          <Font size="17.0" />
       </font></Label>
    <Label layoutX="69.0" layoutY="21.0" text="HOME" textFill="WHITE" />
-   <Circle fill="WHITE" layoutX="42.0" layoutY="30.0" radius="13.0" stroke="WHITE" strokeType="INSIDE" />
+   <Circle fx:id="notificaDot" fill="#53d757" layoutX="495.0" layoutY="235.0" radius="6.0" stroke="WHITE" strokeType="INSIDE" />
    <ImageView fitHeight="19.0" fitWidth="20.0" layoutX="32.0" layoutY="20.0">
       <Image url="@../Img/home.png" />
    </ImageView>

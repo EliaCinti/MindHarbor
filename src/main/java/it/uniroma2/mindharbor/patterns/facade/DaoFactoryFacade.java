@@ -8,39 +8,24 @@ import it.uniroma2.mindharbor.patterns.factory.AppointmentDaoFactory;
 import it.uniroma2.mindharbor.patterns.factory.PatientDaoFactory;
 import it.uniroma2.mindharbor.patterns.factory.PsychologistDaoFactory;
 import it.uniroma2.mindharbor.patterns.factory.UserDaoFactory;
+import it.uniroma2.mindharbor.patterns.observer.ObservableDao;
+import it.uniroma2.mindharbor.sync.CrossPersistenceSyncObserver;
 
-/**
- * Facade class for managing Data Access Object (DAO) creation through factories.
- * This class acts as a central point for managing DAOs across different persistence
- * types (e.g., CSV, MySQL) using a singleton pattern to ensure a single unified point of access.
- * <p>
- * It simplifies the client's interaction with DAO creation, handling the instantiation
- * of DAOs based on the specified persistence type and ensuring that each DAO type is
- * instantiated only once per runtime.
- * </p>
- */
 public class DaoFactoryFacade {
     private static DaoFactoryFacade instance;
+
     private PersistenceType persistenceType;
     private UserDao userDao;
     private PatientDao patientDao;
     private PsychologistDao psychologistDao;
     private AppointmentDao appointmentDao;
 
-    /**
-     * Private constructor to prevent external instantiation, enforcing the singleton pattern.
-     */
-    private DaoFactoryFacade() {
-        /* Empty constructor */
-    }
+    // Observer per le due direzioni di sync
+    private final CrossPersistenceSyncObserver mysqlToCsvObserver = new CrossPersistenceSyncObserver(PersistenceType.MYSQL);
+    private final CrossPersistenceSyncObserver csvToMysqlObserver = new CrossPersistenceSyncObserver(PersistenceType.CSV);
 
-    /**
-     * Provides global access to the single instance of the {@code DaoFactoryFacade},
-     * creating it if it does not yet exist. This method is thread-safe to prevent
-     * multiple instantiation in a multithreaded environment.
-     *
-     * @return The singleton instance of {@code DaoFactoryFacade}.
-     */
+    private DaoFactoryFacade() {}
+
     public static synchronized DaoFactoryFacade getInstance() {
         if (instance == null) {
             instance = new DaoFactoryFacade();
@@ -48,78 +33,66 @@ public class DaoFactoryFacade {
         return instance;
     }
 
-    /**
-     *
-     * Gets the current persistence type being used.
-     * @return The current persistence type (MYSQL or CSV).
-     */
     public PersistenceType getPersistenceType() {
         return persistenceType;
     }
 
-    /**
-     * Sets the type of persistence mechanism that DAOs should use throughout the application.
-     * This allows dynamic changes in the persistence strategy at runtime.
-     *
-     * @param persistenceType The desired persistence type (e.g., CSV, MySQL).
-     */
     public void setPersistenceType(PersistenceType persistenceType) {
-        this.persistenceType = persistenceType;
+        if (this.persistenceType != persistenceType) {
+            this.persistenceType = persistenceType;
+            // Pulisci la cache dei DAO quando cambi tipo
+            this.userDao = null;
+            this.patientDao = null;
+            this.psychologistDao = null;
+            this.appointmentDao = null;
+        }
     }
 
-    /**
-     * Retrieves a singleton instance of {@link UserDao}, creating it through {@link UserDaoFactory}
-     * if not previously instantiated. Ensures the DAO is aligned with the current persistence strategy.
-     *
-     * @return The singleton {@link UserDao} instance.
-     */
     public UserDao getUserDao() {
         if (userDao == null) {
-            UserDaoFactory userDaoFactory = new UserDaoFactory();
-            userDao = userDaoFactory.getUserDao(persistenceType);
+            userDao = new UserDaoFactory().getUserDao(this.persistenceType);
+            // Collega l'observer giusto al momento della creazione
+            if (this.persistenceType == PersistenceType.MYSQL) {
+                ((ObservableDao) userDao).addObserver(mysqlToCsvObserver);
+            } else {
+                ((ObservableDao) userDao).addObserver(csvToMysqlObserver);
+            }
         }
         return userDao;
     }
 
-
-    /**
-     * Retrieves a singleton instance of {@link PatientDao}, creating it through {@link PatientDaoFactory}
-     * if not previously instantiated. Ensures the DAO is aligned with the current persistence strategy.
-     *
-     * @return The singleton {@link PatientDao} instance.
-     */
     public PatientDao getPatientDao() {
         if (patientDao == null) {
-            PatientDaoFactory patientDaoFactory = new PatientDaoFactory();
-            patientDao = patientDaoFactory.getPatientDao(persistenceType);
+            patientDao = new PatientDaoFactory().getPatientDao(this.persistenceType);
+            if (this.persistenceType == PersistenceType.MYSQL) {
+                ((ObservableDao) patientDao).addObserver(mysqlToCsvObserver);
+            } else {
+                ((ObservableDao) patientDao).addObserver(csvToMysqlObserver);
+            }
         }
         return patientDao;
     }
 
-    /**
-     * Retrieves a singleton instance of {@link PsychologistDao}, creating it through {@link PsychologistDaoFactory}
-     * if not previously instantiated. Ensures the DAO is aligned with the current persistence strategy.
-     *
-     * @return The singleton {@link PsychologistDao} instance.
-     */
     public PsychologistDao getPsychologistDao() {
         if (psychologistDao == null) {
-            PsychologistDaoFactory psychologistDaoFactory = new PsychologistDaoFactory();
-            psychologistDao = psychologistDaoFactory.getPsychologistDao(persistenceType);
+            psychologistDao = new PsychologistDaoFactory().getPsychologistDao(this.persistenceType);
+            if (this.persistenceType == PersistenceType.MYSQL) {
+                ((ObservableDao) psychologistDao).addObserver(mysqlToCsvObserver);
+            } else {
+                ((ObservableDao) psychologistDao).addObserver(csvToMysqlObserver);
+            }
         }
         return psychologistDao;
     }
 
-    /**
-     * Retrieves a singleton instance of {@link AppointmentDao}, creating it through {@link AppointmentDaoFactory}
-     * if not previously instantiated. Ensures the DAO is aligned with the current persistence strategy.
-     *
-     * @return The singleton {@link AppointmentDao} instance.
-     */
     public AppointmentDao getAppointmentDao() {
         if (appointmentDao == null) {
-            AppointmentDaoFactory appointmentDaoFactory = new AppointmentDaoFactory();
-            appointmentDao = appointmentDaoFactory.getAppointmentDao(persistenceType);
+            appointmentDao = new AppointmentDaoFactory().getAppointmentDao(this.persistenceType);
+            if (this.persistenceType == PersistenceType.MYSQL) {
+                ((ObservableDao) appointmentDao).addObserver(mysqlToCsvObserver);
+            } else {
+                ((ObservableDao) appointmentDao).addObserver(csvToMysqlObserver);
+            }
         }
         return appointmentDao;
     }

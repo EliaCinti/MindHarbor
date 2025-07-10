@@ -34,6 +34,8 @@ public interface PsychologistDao {
      */
     Psychologist retrievePsychologist(String username) throws DAOException;
 
+    List<Psychologist> retrieveAllPsychologists() throws DAOException;
+
     /**
      * Updates an existing psychologist's data.
      *

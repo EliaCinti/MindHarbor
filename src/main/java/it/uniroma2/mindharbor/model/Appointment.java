@@ -162,6 +162,17 @@ public class Appointment {
         this.notified = true;
     }
 
+    public boolean isDataEquivalent(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Appointment that = (Appointment) o;
+        return getId() == that.getId() &&
+                isNotified() == that.isNotified() &&
+                getDate().equals(that.getDate()) &&
+                getTime().equals(that.getTime()) &&
+                getDescription().equals(that.getDescription());
+    }
+
     /**
      * Checks if two appointments are equal based on their date.
      *

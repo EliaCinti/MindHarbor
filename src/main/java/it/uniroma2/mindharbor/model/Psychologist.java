@@ -122,4 +122,16 @@ public class Psychologist extends User {
         }
         return appointments;
     }
+
+    public boolean isDataEquivalent(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Psychologist that = (Psychologist) o;
+        return getUsername().equals(that.getUsername()) &&
+                getName().equals(that.getName()) &&
+                getSurname().equals(that.getSurname()) &&
+                getGender().equals(that.getGender()) &&
+                java.util.Objects.equals(getOffice(), that.getOffice()) &&
+                java.util.Objects.equals(getHourlyCost(), that.getHourlyCost());
+    }
 }
