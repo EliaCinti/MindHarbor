@@ -47,7 +47,6 @@ public class PatientDaoFactory {
      * This should be replaced with a MySQL-specific DAO once implemented.
      *
      * @return A {@link PatientDao} instance appropriate for MySQL database operations.
-     * @TODO Implement and return a MySQL-specific DAO for patient data management.
      */
     private PatientDao createPatientDaoMySql() {
         return new PatientDaoMySql();

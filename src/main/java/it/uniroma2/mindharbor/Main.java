@@ -14,23 +14,31 @@ import java.util.logging.Logger;
 
 /**
  * Main class serves as the entry point for the MindHarbor application.
- * It initializes and displays the primary user interface.
  * <p>
- * This class extends {@link javafx.application.Application} to create a JavaFX application.
- * It sets up the primary stage, utilizes {@link NavigatorSingleton} to manage navigation,
- * loads the login view from an FXML file, and sets the scene on the primary stage.
+ * This class extends {@link javafx.application.Application} to create a JavaFX application
+ * that provides a user interface for managing psychological appointments and patient-psychologist
+ * interactions. It handles application initialization, persistence type configuration,
+ * and proper resource cleanup on shutdown.
+ * </p>
+ * <p>
+ * The application supports multiple persistence types (MySQL and CSV) with automatic
+ * fallback mechanisms and can be configured via command-line arguments.
+ * </p>
  */
 public class Main extends Application {
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
     /**
      * Starts the primary stage of the application and sets the initial scene.
+     * <p>
+     * This method initializes the {@link NavigatorSingleton} and navigates to the
+     * start screen of the application, which serves as the entry point for user interaction.
+     * </p>
      *
      * @param primaryStage The primary stage for this application, onto which
-     *                     the application scene can be set.
-     *                     The primary stage is configured and
-     *                     displayed by this method.
-     * @throws IOException if there is an error loading the FXML file for the login scene.
+     *                     the application scene can be set. The primary stage is
+     *                     configured and displayed by this method.
+     * @throws IOException If there is an error loading the FXML file for the start screen.
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -40,7 +48,11 @@ public class Main extends Application {
 
     /**
      * Called when the application is stopping.
-     * This method ensures proper cleanup of resources, including closing the database connection if MySQL is being used.
+     * <p>
+     * This method ensures proper cleanup of resources, including closing the database
+     * connection if MySQL persistence is being used. It performs graceful shutdown
+     * to prevent resource leaks.
+     * </p>
      */
     @Override
     public void stop() throws Exception {
@@ -58,16 +70,30 @@ public class Main extends Application {
     }
 
     /**
-     * Main method to configure the application settings based on command-line arguments and launch the application.
-     * This method determines the persistence type and interface type based on the arguments provided.
+     * Main method to configure and launch the MindHarbor application.
+     * <p>
+     * This method processes command-line arguments to determine persistence and interface types,
+     * configures the DAO factory, tests database connectivity with automatic fallback to CSV
+     * if MySQL is unavailable, performs initial data synchronization, and launches the
+     * appropriate user interface.
+     * </p>
+     * <p>
+     * <strong>Persistence Logic:</strong>
+     * <ul>
+     * <li>If MySQL is specified, tests the database connection</li>
+     * <li>If the connection fails, automatically falls back to CSV persistence</li>
+     * <li>Performs initial sync between persistence types if needed</li>
+     * </ul>
+     * </p>
      *
      * @param args Command-line arguments to configure the application:
-     *             args[0]: Optional.
-     *             Specify the persistence type.
-     *             Default is "mysql".
-     *             Args[1]: Optional.
-     *             Specify the interface type.
-     *             Default is "gui".
+     *             <ul>
+     *             <li><strong>args[0]</strong> (optional): Persistence type.
+     *                 Values: "mysql" or "csv". Default: "mysql"</li>
+     *             <li><strong>args[1]</strong> (optional): Interface type.
+     *                 Values: "gui" or "cli". Default: "gui".
+     *                 Note: CLI interface is not yet implemented</li>
+     *             </ul>
      */
     public static void main(String[] args) {
         DaoFactoryFacade daoFactoryFacade = DaoFactoryFacade.getInstance();

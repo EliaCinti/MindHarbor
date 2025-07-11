@@ -145,6 +145,36 @@ public class Patient extends User {
         return appointmentListAfter;
     }
 
+    /**
+     * Checks if this patient is data-equivalent to another object.
+     * <p>
+     * This method performs a deep comparison of all patient-specific data fields
+     * to determine if two patient objects contain the same information.
+     * Unlike the standard {@code equals} method, this method focuses on data
+     * equivalence rather than object identity, making it particularly useful
+     * for synchronization operations between different persistence systems.
+     * </p>
+     * <p>
+     * The comparison includes:
+     * <ul>
+     *   <li>Username (inherited from User)</li>
+     *   <li>Name and surname (inherited from User)</li>
+     *   <li>Gender (inherited from User)</li>
+     *   <li>Assigned psychologist (patient-specific)</li>
+     *   <li>Birthday (patient-specific)</li>
+     * </ul>
+     * </p>
+     * <p>
+     * Note: This method does not compare the appointment list, as it focuses on
+     * the patient's intrinsic data rather than relational data that may vary
+     * between persistence systems during synchronization.
+     * </p>
+     *
+     * @param o The object to compare with this patient
+     * @return {@code true} if the object is a Patient with equivalent data,
+     *         {@code false} otherwise
+     * @see #equals(Object) for identity-based comparison
+     */
     public boolean isDataEquivalent(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -170,7 +200,6 @@ public class Patient extends User {
         return false;
     }
 
-
     /**
      * Generates a hash code for a patient, derived from the username.
      *
@@ -180,7 +209,4 @@ public class Patient extends User {
     public int hashCode() {
         return super.hashCode();
     }
-
-
-
 }

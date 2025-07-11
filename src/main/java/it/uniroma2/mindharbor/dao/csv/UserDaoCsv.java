@@ -9,9 +9,7 @@ import it.uniroma2.mindharbor.exception.DAOException;
 import it.uniroma2.mindharbor.patterns.observer.DaoOperation;
 import it.uniroma2.mindharbor.utilities.CsvUtilities;
 import it.uniroma2.mindharbor.utilities.PasswordUtils;
-
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoCsv extends AbstractObservableDao implements UserDao {
@@ -59,29 +57,6 @@ public class UserDaoCsv extends AbstractObservableDao implements UserDao {
             }
         }
         return null;
-    }
-
-    @Override
-    public List<UserBean> retrieveAllUsers() throws DAOException {
-        List<UserBean> users = new ArrayList<>();
-        List<String[]> records = CsvUtilities.readAll(fd);
-        if (!records.isEmpty() && "Username".equals(records.getFirst()[0])) {
-            records.removeFirst(); // Rimuovi header
-        }
-
-        for (String[] record : records) {
-            // Costruisci il bean senza password in chiaro per sicurezza
-            UserBean user = new UserBean.Builder<>()
-                    .username(record[UserDaoCsvConstants.USER_INDEX_USERNAME])
-                    .password(record[UserDaoCsvConstants.USER_INDEX_PASSWORD]) // La password nel DB è già hashata
-                    .name(record[UserDaoCsvConstants.USER_INDEX_FIRST_NAME])
-                    .surname(record[UserDaoCsvConstants.USER_INDEX_LAST_NAME])
-                    .type(record[UserDaoCsvConstants.USER_INDEX_TYPE])
-                    .gender(record[UserDaoCsvConstants.USER_INDEX_GENDER])
-                    .build();
-            users.add(user);
-        }
-        return users;
     }
 
     @Override

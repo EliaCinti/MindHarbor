@@ -92,29 +92,6 @@ public class UserDaoMySql extends AbstractObservableDao implements UserDao {
     }
 
     @Override
-    public List<UserBean> retrieveAllUsers() throws DAOException {
-        List<UserBean> users = new ArrayList<>();
-        Connection connection = getConnection();
-        try (PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.SELECT_ALL_USERS);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                UserBean user = new UserBean.Builder<>()
-                        .username(rs.getString("Username"))
-                        .password(rs.getString("Password"))
-                        .name(rs.getString("Firstname"))
-                        .surname(rs.getString("Lastname"))
-                        .type(rs.getString("Type"))
-                        .gender(rs.getString("Gender"))
-                        .build();
-                users.add(user);
-            }
-        } catch (SQLException e) {
-            throw new DAOException("Error retrieving all users: " + e.getMessage(), e);
-        }
-        return users;
-    }
-
-    @Override
     public boolean isUsernameTaken(String username) throws DAOException {
         Connection connection = getConnection();
         try (PreparedStatement stmt = connection.prepareStatement(UserDaoMySqlQueries.CHECK_USERNAME_EXISTS)) {

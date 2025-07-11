@@ -2,7 +2,7 @@ package it.uniroma2.mindharbor.utilities;
 
 /**
  * SignUpDataSingleton implements the Singleton pattern to share registration data
- * between different graphic controllers during the multi-step registration process.
+ * between different graphic controllers during the multistep registration process.
  * <p>
  * This class allows temporarily storing user data entered in the first
  * registration form and making it available to subsequent user-specific forms.
@@ -10,7 +10,6 @@ package it.uniroma2.mindharbor.utilities;
  */
 public class SignUpDataSingleton {
     private static SignUpDataSingleton instance;
-
     private String username;
     private String password;
     private String name;

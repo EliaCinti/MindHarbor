@@ -41,6 +41,16 @@ public interface PatientDao {
      */
     Patient retrievePatient(String username) throws DAOException;
 
+    /**
+     * Retrieves all patients from the persistence layer.
+     * <p>
+     * This method returns a list containing all registered patients in the system.
+     * If no patients are found, an empty list is returned.
+     * </p>
+     *
+     * @return A list of {@link Patient} objects representing all patients in the system.
+     * @throws DAOException If an error occurs while accessing the data storage.
+     */
     List<Patient> retrieveAllPatients() throws DAOException;
 
     /**

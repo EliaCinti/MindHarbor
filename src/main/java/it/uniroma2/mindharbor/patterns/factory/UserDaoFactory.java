@@ -40,7 +40,6 @@ public class UserDaoFactory {
      * of {@link UserDao} that manages data persistence using a MySQL database.
      *
      * @return A new instance of {@link UserDaoMySql}.
-     * @TODO Implement and return a MySQL-specific DAO for user data management.
      */
     private UserDao createUserDaoMySql() {
         return new UserDaoMySql();

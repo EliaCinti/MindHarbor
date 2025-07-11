@@ -162,6 +162,35 @@ public class Appointment {
         this.notified = true;
     }
 
+    /**
+     * Checks if this appointment is data-equivalent to another object.
+     * <p>
+     * This method performs a deep comparison of all appointment data fields
+     * to determine if two appointment objects contain the same information.
+     * Unlike the standard {@code equals} method, this method focuses on data
+     * equivalence rather than object identity, making it particularly useful
+     * for synchronization operations between different persistence systems.
+     * </p>
+     * <p>
+     * The comparison includes:
+     * <ul>
+     *   <li>Appointment ID (unique identifier)</li>
+     *   <li>Date and time (scheduling information)</li>
+     *   <li>Description (appointment details)</li>
+     *   <li>Notification status (UI state)</li>
+     * </ul>
+     * </p>
+     * <p>
+     * This method ensures that appointments are considered equivalent if they
+     * have identical content, regardless of which persistence system they
+     * originated from during cross-persistence synchronization.
+     * </p>
+     *
+     * @param o The object to compare with this appointment
+     * @return {@code true} if the object is an Appointment with equivalent data,
+     *         {@code false} otherwise
+     * @see #equals(Object) for date-based comparison
+     */
     public boolean isDataEquivalent(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

@@ -36,6 +36,17 @@ public interface AppointmentDao {
      */
     Appointment retrieveAppointment(int appointmentId) throws DAOException;
 
+    /**
+     * Retrieves all appointments from the persistence layer.
+     * <p>
+     * This method returns a list containing all appointments in the system,
+     * regardless of patient or psychologist. If no appointments are found,
+     * an empty list is returned.
+     * </p>
+     *
+     * @return A list of {@link Appointment} objects representing all appointments in the system.
+     * @throws DAOException If an error occurs while accessing the data storage.
+     */
     List<Appointment> retrieveAllAppointments() throws DAOException;
 
     /**

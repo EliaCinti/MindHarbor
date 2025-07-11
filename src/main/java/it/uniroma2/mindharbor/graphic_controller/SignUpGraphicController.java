@@ -139,5 +139,4 @@ public class SignUpGraphicController {
             logger.log(Level.SEVERE, "Unable to navigate back to start screen", e);
         }
     }
-
 }

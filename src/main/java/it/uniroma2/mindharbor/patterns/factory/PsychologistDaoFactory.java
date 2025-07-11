@@ -49,7 +49,6 @@ public class PsychologistDaoFactory {
      * that leverages SQL for efficient data retrieval and storage.
      *
      * @return A newly instantiated {@link PsychologistDaoMySql}.
-     * @TODO Implement and return a MySQL-specific DAO for psychologist data management.
      */
     private PsychologistDao createPsychologistDaoMySql() {
         return new PsychologistDaoMySql();

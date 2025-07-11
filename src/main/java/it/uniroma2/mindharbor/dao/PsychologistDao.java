@@ -34,6 +34,16 @@ public interface PsychologistDao {
      */
     Psychologist retrievePsychologist(String username) throws DAOException;
 
+    /**
+     * Retrieves all psychologists from the persistence layer.
+     * <p>
+     * This method returns a list containing all registered psychologists in the system.
+     * If no psychologists are found, an empty list is returned.
+     * </p>
+     *
+     * @return A list of {@link Psychologist} objects representing all psychologists in the system.
+     * @throws DAOException If an error occurs while accessing the data storage.
+     */
     List<Psychologist> retrieveAllPsychologists() throws DAOException;
 
     /**

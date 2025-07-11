@@ -17,32 +17,81 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Manages the initial synchronization process between different persistence types.
+ * <p>
+ * This class is responsible for ensuring data consistency when the application starts
+ * by comparing and synchronizing data between CSV and MySQL storage systems.
+ * It handles conflict resolution by giving priority to the primary persistence type.
+ * </p>
+ * <p>
+ * The synchronization process includes:
+ * <ul>
+ *   <li>Users and patient/psychologist profiles</li>
+ *   <li>Appointment records for all patients</li>
+ *   <li>Conflict detection and resolution</li>
+ * </ul>
+ * </p>
+ *
+ * @see CrossPersistenceSyncObserver for real-time synchronization
+ * @see SyncContext for preventing synchronization loops
+ */
 public class InitialSyncManager {
 
     private static final Logger logger = Logger.getLogger(InitialSyncManager.class.getName());
 
+    /**
+     * Performs a complete initial synchronization between primary and secondary persistence types.
+     * <p>
+     * This method coordinates the synchronization of all entities in the correct order:
+     * patients first (since they can exist independently), then psychologists,
+     * and finally appointments (which depend on patients).
+     * </p>
+     * <p>
+     * The synchronization is performed within a {@link SyncContext} to prevent
+     * observer notifications that could cause infinite loops.
+     * </p>
+     *
+     * @param primaryType The primary persistence type that takes precedence in conflict resolution
+     */
     public void performInitialSync(PersistenceType primaryType) {
-        logger.info("Inizio della sincronizzazione iniziale...");
+        logger.info("Starting initial synchronization...");
         SyncContext.startSync();
         try {
             PersistenceType secondaryType = (primaryType == PersistenceType.MYSQL) ? PersistenceType.CSV : PersistenceType.MYSQL;
 
-            // Sincronizza le entità
+            // Synchronize entities in dependency order
             List<Patient> syncedPatients = syncPatients(primaryType, secondaryType);
             syncPsychologists(primaryType, secondaryType);
             syncAppointments(syncedPatients, primaryType, secondaryType);
 
-            logger.info("Sincronizzazione iniziale completata.");
+            logger.info("Initial synchronization completed successfully.");
         } catch (DAOException e) {
-            logger.log(Level.SEVERE, "La sincronizzazione iniziale è fallita.", e);
+            logger.log(Level.SEVERE, "Initial synchronization failed.", e);
         } finally {
             SyncContext.endSync();
-            logger.info("Observer per la sincronizzazione real-time riattivati.");
+            logger.info("Real-time synchronization observers reactivated.");
         }
     }
 
+    /**
+     * Synchronizes patient data between primary and secondary persistence types.
+     * <p>
+     * This method compares patient records from both storage systems and:
+     * <ul>
+     *   <li>Copies missing patients from one system to another</li>
+     *   <li>Resolves conflicts by prioritizing the primary persistence type</li>
+     *   <li>Ensures data consistency across both systems</li>
+     * </ul>
+     * </p>
+     *
+     * @param primary The primary persistence type
+     * @param secondary The secondary persistence type
+     * @return List of synchronized patients from the primary persistence
+     * @throws DAOException if patient data access or synchronization fails
+     */
     private List<Patient> syncPatients(PersistenceType primary, PersistenceType secondary) throws DAOException {
-        logger.info("Sincronizzazione Pazienti...");
+        logger.info("Synchronizing patients...");
         DaoFactoryFacade factory = DaoFactoryFacade.getInstance();
 
         factory.setPersistenceType(primary);
@@ -59,19 +108,19 @@ public class InitialSyncManager {
             Patient secondaryPatient = secondaryMap.get(key);
 
             if (primaryPatient != null && secondaryPatient == null) {
-                logger.info("Sync: Copio Paziente " + key + " da " + primary + " a " + secondary);
+                logger.info("Sync: Copying patient " + key + " from " + primary + " to " + secondary);
                 PatientBean beanToSave = createPatientBeanFromModel(primaryPatient, factory, primary);
                 factory.setPersistenceType(secondary);
                 factory.getPatientDao().savePatient(beanToSave);
             } else if (primaryPatient == null && secondaryPatient != null) {
-                logger.info("Sync: Copio Paziente " + key + " da " + secondary + " a " + primary);
+                logger.info("Sync: Copying patient " + key + " from " + secondary + " to " + primary);
                 PatientBean beanToSave = createPatientBeanFromModel(secondaryPatient, factory, secondary);
                 factory.setPersistenceType(primary);
                 factory.getPatientDao().savePatient(beanToSave);
             } else if (primaryPatient != null && !primaryPatient.isDataEquivalent(secondaryPatient)) {
-                logger.info("Sync Conflitto: Dati diversi per paziente " + key + ". La sorgente " + primary + " vince.");
+                logger.info("Sync Conflict: Different data for patient " + key + ". Primary source " + primary + " takes precedence.");
                 PatientBean beanToUpdate = createPatientBeanFromModel(primaryPatient, factory, primary);
-                factory.setPersistenceType(secondary); // Assicurati di scrivere sulla destinazione secondaria
+                factory.setPersistenceType(secondary); // Si scrive sulla destinazione secondaria
                 factory.getPatientDao().updatePatient(primaryPatient, beanToUpdate);
             }
         }
@@ -80,8 +129,20 @@ public class InitialSyncManager {
         return factory.getPatientDao().retrieveAllPatients();
     }
 
+    /**
+     * Synchronizes psychologist data between primary and secondary persistence types.
+     * <p>
+     * Similar to patient synchronization, this method ensures that psychologist
+     * records are consistent across both storage systems, with conflict resolution
+     * favoring the primary persistence type.
+     * </p>
+     *
+     * @param primary The primary persistence type
+     * @param secondary The secondary persistence type
+     * @throws DAOException if psychologist data access or synchronization fails
+     */
     private void syncPsychologists(PersistenceType primary, PersistenceType secondary) throws DAOException {
-        logger.info("Sincronizzazione Psicologi...");
+        logger.info("Synchronizing psychologists...");
         DaoFactoryFacade factory = DaoFactoryFacade.getInstance();
 
         factory.setPersistenceType(primary);
@@ -97,24 +158,39 @@ public class InitialSyncManager {
             Psychologist primaryPsy = primaryMap.get(key);
             Psychologist secondaryPsy = secondaryMap.get(key);
             if (primaryPsy != null && secondaryPsy == null) {
+                logger.info("Sync: Copying psychologist " + key + " from " + primary + " to " + secondary);
                 PsychologistBean bean = createPsychologistBeanFromModel(primaryPsy, factory, primary);
                 factory.setPersistenceType(secondary);
                 factory.getPsychologistDao().savePsychologist(bean);
             } else if (primaryPsy == null && secondaryPsy != null) {
+                logger.info("Sync: Copying psychologist " + key + " from " + secondary + " to " + primary);
                 PsychologistBean bean = createPsychologistBeanFromModel(secondaryPsy, factory, secondary);
                 factory.setPersistenceType(primary);
                 factory.getPsychologistDao().savePsychologist(bean);
             } else if (primaryPsy != null && !primaryPsy.isDataEquivalent(secondaryPsy)) {
-                logger.info("Sync Conflitto: Dati diversi per psicologo " + key + ". La sorgente " + primary + " vince.");
-                PsychologistBean beanToUpdate = createPsychologistBeanFromModel(primaryPsy, factory, primary);
+                logger.info("Sync Conflict: Different data for psychologist " + key + ". Primary source " + primary + " takes precedence.");                PsychologistBean beanToUpdate = createPsychologistBeanFromModel(primaryPsy, factory, primary);
                 factory.setPersistenceType(secondary);
                 factory.getPsychologistDao().updatePsychologist(primaryPsy, beanToUpdate);
             }
         }
     }
 
+    /**
+     * Synchronizes appointment data for all patients between persistence types.
+     * <p>
+     * This method processes appointments for each patient individually, ensuring
+     * that appointment schedules are consistent across both storage systems.
+     * Since appointments are patient-specific, this method requires the list
+     * of synchronized patients to process.
+     * </p>
+     *
+     * @param syncedPatients List of patients whose appointments should be synchronized
+     * @param primary The primary persistence type
+     * @param secondary The secondary persistence type
+     * @throws DAOException if appointment data access or synchronization fails
+     */
     private void syncAppointments(List<Patient> syncedPatients, PersistenceType primary, PersistenceType secondary) throws DAOException {
-        logger.info("Sincronizzazione Appuntamenti...");
+        logger.info("Synchronizing appointments...");
         DaoFactoryFacade factory = DaoFactoryFacade.getInstance();
 
         for (Patient patient : syncedPatients) {
@@ -134,15 +210,14 @@ public class InitialSyncManager {
                 Appointment secondaryApp = secondaryMap.get(id);
 
                 if (primaryApp != null && secondaryApp == null) {
-                    logger.info("Sync: Copio Appuntamento " + id + " da " + primary + " a " + secondary);
-                    factory.setPersistenceType(secondary);
+                    logger.info("Sync: Copying appointment " + id + " from " + primary + " to " + secondary);                    factory.setPersistenceType(secondary);
                     factory.getAppointmentDao().saveAppointment(primaryApp, username);
                 } else if (primaryApp == null && secondaryApp != null) {
-                    logger.info("Sync: Copio Appuntamento " + id + " da " + secondary + " a " + primary);
+                    logger.info("Sync: Copying appointment " + id + " from " + secondary + " to " + primary);
                     factory.setPersistenceType(primary);
                     factory.getAppointmentDao().saveAppointment(secondaryApp, username);
                 } else if (primaryApp != null && !primaryApp.isDataEquivalent(secondaryApp)) {
-                    logger.info("Sync Conflitto: Dati diversi per appuntamento " + id + ". La sorgente " + primary + " vince.");
+                    logger.info("Sync Conflict: Different data for appointment " + id + ". Primary source " + primary + " takes precedence.");
                     factory.setPersistenceType(secondary);
                     factory.getAppointmentDao().updateAppointment(primaryApp);
                 }
@@ -150,7 +225,18 @@ public class InitialSyncManager {
         }
     }
 
-    // Metodi Helper
+    // Helper Methods
+
+    /**
+     * Converts a list of patients to a map with username as key.
+     * <p>
+     * This helper method facilitates efficient lookup and comparison
+     * of patient records during synchronization.
+     * </p>
+     *
+     * @param list List of patients to convert
+     * @return Map with username as key and Patient object as value
+     */
     private Map<String, Patient> listToMap(List<Patient> list) {
         Map<String, Patient> map = new HashMap<>();
         for (Patient p : list) {
@@ -159,6 +245,16 @@ public class InitialSyncManager {
         return map;
     }
 
+    /**
+     * Converts a list of psychologists to a map with username as key.
+     * <p>
+     * This helper method facilitates efficient lookup and comparison
+     * of psychologist records during synchronization.
+     * </p>
+     *
+     * @param list List of psychologists to convert
+     * @return Map with username as key and Psychologist object as value
+     */
     private Map<String, Psychologist> listToMapPsychologist(List<Psychologist> list) {
         Map<String, Psychologist> map = new HashMap<>();
         for (Psychologist p : list) {
@@ -167,6 +263,16 @@ public class InitialSyncManager {
         return map;
     }
 
+    /**
+     * Converts a list of appointments to a map with appointment ID as key.
+     * <p>
+     * This helper method facilitates efficient lookup and comparison
+     * of appointment records during synchronization.
+     * </p>
+     *
+     * @param list List of appointments to convert
+     * @return Map with appointment ID as key and Appointment object as value
+     */
     private Map<Integer, Appointment> listToMapAppointments(List<Appointment> list) {
         Map<Integer, Appointment> map = new HashMap<>();
         for (Appointment a : list) {
@@ -175,6 +281,20 @@ public class InitialSyncManager {
         return map;
     }
 
+    /**
+     * Creates a PatientBean from a Patient model object for persistence operations.
+     * <p>
+     * This method retrieves the complete user information (including hashed password)
+     * from the source persistence and creates a properly formatted bean for saving
+     * or updating in the destination persistence.
+     * </p>
+     *
+     * @param patient The patient model object to convert
+     * @param factory The DAO factory facade for accessing persistence
+     * @param sourcePersistence The persistence type to retrieve user data from
+     * @return A PatientBean with complete information for persistence operations
+     * @throws DAOException if user data retrieval fails
+     */
     private PatientBean createPatientBeanFromModel(Patient patient, DaoFactoryFacade factory, PersistenceType sourcePersistence) throws DAOException {
         PersistenceType originalType = factory.getPersistenceType();
         try {
@@ -192,6 +312,20 @@ public class InitialSyncManager {
         }
     }
 
+    /**
+     * Creates a PsychologistBean from a Psychologist model object for persistence operations.
+     * <p>
+     * This method retrieves the complete user information (including hashed password)
+     * from the source persistence and creates a properly formatted bean for saving
+     * or updating in the destination persistence.
+     * </p>
+     *
+     * @param psy The psychologist model object to convert
+     * @param factory The DAO factory facade for accessing persistence
+     * @param sourcePersistence The persistence type to retrieve user data from
+     * @return A PsychologistBean with complete information for persistence operations
+     * @throws DAOException if user data retrieval fails
+     */
     private PsychologistBean createPsychologistBeanFromModel(Psychologist psy, DaoFactoryFacade factory, PersistenceType sourcePersistence) throws DAOException {
         PersistenceType originalType = factory.getPersistenceType();
         try {
