@@ -20,7 +20,6 @@ hs_err_pid*
 .idea/modules.xml
 .idea/.name
 
-# File di Eclipse
 .classpath
 .project
 .settings/
@@ -46,3 +45,6 @@ dependency-reduced-pom.xml
 *.swp
 *.swo
 *.swn
+
+# File di dati dell'applicazione
+/db/csv/*.csv

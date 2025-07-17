@@ -1,4 +1,4 @@
--- MySQL Workbench Forward Engineering (Adattato per MindHarbor)
+-- MySQL Workbench Forward Engineering
 
 -- Impostazioni iniziali per la sessione SQL
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;

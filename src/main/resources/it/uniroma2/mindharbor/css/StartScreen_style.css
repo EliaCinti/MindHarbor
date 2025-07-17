@@ -1,13 +1,5 @@
-/* Button styles */
-.button {
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-padding: 10px 15px;
-    -fx-border-radius: 20px;
-    -fx-background-radius: 20px;
-    -fx-transition: all 0.3s ease-in-out;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.4, 0, 2);
-}
+/* StartScreen_style.css */
+@import "Base_style.css";
 
 /* Sign in button style */
 .signIn_button {
@@ -37,24 +29,3 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 12, 0.5, 0, 3);
 }
 
-
-/* Pressed state style (mouse click) */
-.button:pressed {
-    -fx-background-color: #2e7d32;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0.5, 0, 2);
-    -fx-scale-x: 1.0;
-    -fx-scale-y: 1.0;
-}
-
-/* Style for MINDHARBOR title */
-.title-text {
-    -fx-font-family: "KoHo Light";
-    -fx-font-size: 26px;
-    -fx-text-fill: white;
-    -fx-letter-spacing: 10px;
-    -fx-font-weight: 200;
-    -fx-text-alignment: center;
-    -fx-translate-x: -10px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 3, 0.3, 0, 1);
-    -fx-text-fill: rgba(255, 255, 255, 0.8);
-}
